@@ -55,4 +55,10 @@ public class LoginDetails implements UserDetails {
     public Login getLogin() {
         return this.login;
     }
+
+    public Integer getUserId() {
+        return this.login.getUser().getId();
+    }
+
+
 }

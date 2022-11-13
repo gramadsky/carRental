@@ -1,8 +1,9 @@
 package com.gramadsky.model.entity;
 
 import lombok.Data;
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -12,10 +13,13 @@ public class CarClass {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "carclass")
-    private String carClass;
+    private String nameClass;
+
+    @OneToMany(mappedBy="carClass",cascade = CascadeType.ALL)
+    private List<Car> cars = new ArrayList<>();
 
     @Override
     public String toString() {
-        return carClass;
+        return nameClass;
     }
 }

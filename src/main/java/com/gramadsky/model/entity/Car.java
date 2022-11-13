@@ -1,7 +1,6 @@
 package com.gramadsky.model.entity;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +18,11 @@ public class Car {
     private CarClass carClass;
     @Column
     private float cost;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "availability")
-    private Availability availability;
+    @Column
+    private String availability;
 
     @OneToMany(mappedBy="car",cascade = CascadeType.ALL)
-    private List<Order> orderList = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     @Override
     public String toString() {

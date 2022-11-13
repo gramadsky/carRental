@@ -1,6 +1,6 @@
 package com.gramadsky.service;
 
-import com.gramadsky.model.entity.Car;
+
 import com.gramadsky.model.entity.User;
 
 import java.util.List;

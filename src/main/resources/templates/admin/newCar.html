@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Save new car</title>
+</head>
+<body>
+
+<div id="header">
+    <h1>Car Rental </h1>
+    <h4>
+        <a id=cars title="list of all cars" href="/admin/cars">Cars</a>
+        <a id=orders title="list of all orders" href="/admin/orders">Orders</a>
+        <a id=users title="list of all users" href="/admin/users">Users</a>
+        <a id=logout href="/logout">Logout</a>
+    </h4>
+</div>
+
+<form th:method="POST" th:action="@{/admin/saveNewCar}">
+    Car model:
+    <input type="text" th:field="*{car.carModel}"/><br/><br/>
+    Car class:
+    <select class="form-control"  th:name="nameClass">
+        <option value="">Select car class</option>
+        <option th:each="carClass : ${carClasses}"
+                th:value="${carClass.nameClass}"
+                th:text="${carClass.nameClass}">
+        </option>
+    </select>
+    <br/><br/>
+    Car cost:
+    <input type="number" th:field="*{car.cost}"/><br/><br/>
+    Car availability:
+    <input type="text" th:field="*{car.availability}"/><br/>
+    <br/>
+    <input type="submit" value="Save new car"/>
+</form>
+<style>
+
+
+		body{
+<!--		background: rgb(52, 56, 61);-->
+		color: rgb(255, 255, 255);
+		text-align: center;
+		}
+
+		#logout, #users, #cars, #orders {
+        margin-top: 20px;
+        line-height: 38px;
+        font-size: 93%;
+        padding: 0 25px;
+        background: white;
+        border: 2px solid rgb(112, 182, 234);
+        border-radius: 35px;
+        position: relative;
+        left: 35%;
+        transform: translate(-55%, 0);
+        }
+
+
+
+
+</style>
+</body>
+</html>

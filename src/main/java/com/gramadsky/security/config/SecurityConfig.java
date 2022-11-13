@@ -19,19 +19,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public SecurityConfig(LoginDetailsService loginDetailsService) {
         this.loginDetailsService = loginDetailsService;
     }
+
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         // конфигурируем сам Spring Security
         // конфигурируем авторизацию
-        http.csrf().disable()
+        http.csrf().disable()  //оключаем защиту от межсайтовой подделки запросов
                 .authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+                .antMatchers("/admin", "/users").hasRole("ADMIN")
+                .antMatchers("/auth/login", "/auth/registration", "/error","/admin/*","/user/*").permitAll()
                 .anyRequest().hasAnyRole("CLIENT", "ADMIN")
                 .and()
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/hello",true)
+                .defaultSuccessUrl("/hello", true)
                 .failureUrl("/auth/login?error")
                 .and()
                 .logout()
@@ -47,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder getPasswordEncoder(){
+    public PasswordEncoder getPasswordEncoder() {
         return NoOpPasswordEncoder.getInstance();
 
     }

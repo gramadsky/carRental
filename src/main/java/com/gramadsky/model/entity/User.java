@@ -2,7 +2,6 @@ package com.gramadsky.model.entity;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,6 +33,12 @@ public class User {
     private List<Order> orderList = new ArrayList<>();
 
     public User() {
+    }
+
+    @Override
+    public String toString() {
+        return id + ". " + name + ", " + surname +
+                 dateOfBirth + ", " + email;
     }
 }
 

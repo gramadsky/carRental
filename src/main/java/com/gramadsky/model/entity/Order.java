@@ -2,21 +2,21 @@ package com.gramadsky.model.entity;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Data
 @Entity
+@Table(name = "request")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user")
     private User user;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "car_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "car_id")
     private Car car;
     @Column(name = "startofrental")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -26,13 +26,27 @@ public class Order {
     private LocalDate endOfRental;
     @Column(name = "passportdata")
     private String passportData;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "discount_id", referencedColumnName = "id")
-    private Discount discount;
     @Column
-    private float price;
+    private Float reduction;
+    @Column
+    private Float price;
+    @Column
+    private Status status;
 
+    public  enum Status {
+        CONFIRMED("CONFIRMED"),
+        DENIED("DENIED"),
+        PAID_WAITING_CONFIRMATION("PAID, WAITING CONFIRMATION"),
+        WAITING_PAYMENT("WAITING PAYMENT");
 
-    public Order() {
+        private final String displayName;
+
+        Status(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 }

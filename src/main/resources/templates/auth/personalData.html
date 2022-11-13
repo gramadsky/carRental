@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
-
-
 </head>
 
 <body>
 <h1>Registration</h1>
-
 <div id="wrapper">
     <form id="signin" th:method="POST" th:action="@{/auth/personalData}">
         <input type="text" th:field="*{user.name}" id="name" placeholder="name"/>
@@ -22,20 +19,11 @@
         <br/>
         <input type="text" th:field="*{user.phoneNumber}" id="phoneNumber" placeholder="phoneNumber">
         <br/>
-<!--        <input type="text" th:field="${clientStatus}" id="clientStatus" placeholder="clientStatus">-->
-<!--        <br/>-->
-
-
-
+        <!--        <input type="text" th:field="${clientStatus}" id="clientStatus" placeholder="clientStatus">-->
+        <!--        <br/>-->
         <button type="submit"></button>
     </form>
-
 </div>
-
-
-<style>
-
-</style>
 
 </body>
 </html>

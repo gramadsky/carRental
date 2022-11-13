@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>My orders</title>
+</head>
+<body>
+
+<div id="header">
+    <h1>Car Rental </h1>
+    <h4>
+        <a id=hello href="/hello">Car list</a>
+        <a id=orders href="/orders">My orders</a>
+        <a id=logout href="/logout">Logout</a>
+    </h4>
+</div>
+
+<div th:switch="${orders}">
+    <h2 th:case="null">No orders found!</h2>
+    <div th:case="*">
+
+        <h1>My orders</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Car</th>
+                <th>Start of rental</th>
+                <th>End Of Rental</th>
+                <th>Passport Data</th>
+                <th>Reduction</th>
+                <th>Price</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.user.name}"></td>
+                <td th:text="${order.user.surname}"></td>
+                <td th:text="${order.car.carModel}"></td>
+                <td th:text="${order.startOfRental}"></td>
+                <td th:text="${order.endOfRental}"></td>
+                <td th:text="${order.passportData}"></td>
+                <td th:text="${order.reduction}"></td>
+                <td th:text="${order.price}"></td>
+                <td th:text="${order.status.displayName}"></td>
+                <td>
+                    <div th:if="${order.status.displayName == 'WAITING PAYMENT'}">
+                        <form th:method="POST" th:action="@{/pay/{id}(id=${order.id})}">
+                            <button type="submit" th:name="action">Pay</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<style>
+
+<!--${order.status} == 'WAITING_PAYMENT'-->
+		body{
+<!--		background: rgb(52, 56, 61);-->
+		color: rgb(255, 255, 255);
+		text-align: center;
+		}
+
+		#href{
+        color: rgb(255, 255, 255);
+		}
+
+		#logout, #hello, #orders {
+        margin-top: 20px;
+        line-height: 38px;
+        font-size: 93%;
+        padding: 0 25px;
+        background: white;
+        border: 2px solid rgb(112, 182, 234);
+        border-radius: 35px;
+        position: relative;
+        left: 35%;
+        transform: translate(-55%, 0);
+        }
+        button:hover {
+        transition: 0.3s linear;
+        background: rgb(112, 182, 234);
+        color: white;
+        }
+
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+
+</style>
+</body>
+</html>

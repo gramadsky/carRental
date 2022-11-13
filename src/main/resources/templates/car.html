@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>order</title>
+</head>
+<body>
+<h1>
+    <form th:method="POST" th:action="@{/car}">
+        <p th:text="${order.car}">value</p>
+        <p th:text="${order.startOfRental}">value</p>
+        <p th:text="${order.endOfRental}">value</p>
+        <p th:text="${order.passportData}">value</p>
+        <p th:text="${order.user}">value</p>
+    </form>
+</h1>
+</body>
+</html>

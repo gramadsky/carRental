@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class DiscountServiceImpl implements DiscountService {
-    private DiscountRepository repository;
+    private final DiscountRepository repository;
 
     @Override
     public Discount findById(Integer id) {

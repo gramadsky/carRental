@@ -9,8 +9,9 @@ public interface CarService {
 
     Car findById(Integer id);
 
-    void deleteCar(Integer id);
+    void deleteCar(Car car);
 
-    void saveCar(Car car);
+    void updateCar(Car car);
 
+    void saveNewCar(String nameClass,Car car);
 }

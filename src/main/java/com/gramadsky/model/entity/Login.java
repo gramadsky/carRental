@@ -1,7 +1,6 @@
 package com.gramadsky.model.entity;
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data
@@ -14,11 +13,10 @@ public class Login {
     private String username;
     @Column
     private String password;
-    //    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "role")
+    @Column
     private String role;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+
+<div id="header">
+    <h1>Car Rental </h1>
+    Hello, Admin!
+    <h4>
+        <a id=cars title="list of all cars" href="/admin/cars">Cars</a>
+        <a id=orders title="list of all orders" href="/admin/orders">Orders</a>
+        <a id=users title="list of all users" href="/admin/users">Users</a>
+        <a id=logout href="/logout">Logout</a>
+    </h4>
+</div>
+
+<div th:switch="${logins}">
+    <h2 th:case="null">No users found!</h2>
+    <div th:case="*">
+        <h3>Users</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Date of birth</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="login : ${logins}">
+                <td th:text="${login.id}"></td>
+                <td th:text="${login.username}"></td>
+                <td th:text="${login.user.name}"></td>
+                <td th:text="${login.user.surname}"></td>
+                <td th:text="${login.user.dateOfBirth}"></td>
+                <td th:text="${login.user.email}"></td>
+                <td th:text="${login.role}"></td>
+                <td th:text="${login.user.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+
+        body{
+<!--    	background: rgb(52, 56, 61);-->
+		color: rgb(255, 255, 255);
+		text-align: center;
+		}
+
+		#href{
+        color: rgb(255, 255, 255);
+		}
+
+		#logout, #users, #cars, #orders {
+        margin-top: 20px;
+        line-height: 38px;
+        font-size: 93%;
+        padding: 0 25px;
+        background: white;
+        border: 2px solid rgb(112, 182, 234);
+        border-radius: 35px;
+        position: relative;
+        left: 35%;
+        transform: translate(-55%, 0);
+        }
+        button:hover {
+        transition: 0.3s linear;
+        background: rgb(112, 182, 234);
+        color: white;
+        }
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+</style>
+</body>
+</html>

@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 @Component
 public class LoginValidator implements Validator {
 
-    private LoginDetailsService loginDetailsService;
+    private final LoginDetailsService loginDetailsService;
 
     @Autowired
     public LoginValidator(LoginDetailsService loginDetailsService) {
@@ -33,6 +33,6 @@ public class LoginValidator implements Validator {
         }catch (UsernameNotFoundException ignored) {
             return;
         }
-        errors.rejectValue("username","", "This username is already taken");
+        errors.rejectValue("login.username","", "This username is already taken");
     }
 }
