@@ -32,7 +32,7 @@
     <br/>
     <br/>
     <label>Passport data: </label><br/>
-    <strong th:text="${order.passportData}">value</strong>
+    <strong th:text="${order.user.passportData}">value</strong>
     <br/>
     <br/>
     <label>Discount: </label><br/>
@@ -43,7 +43,8 @@
     <strong th:text="${order.price}">value</strong>
     <br/>
     <br/>
-    <input type="submit" value="Pay"/>
+    <button type="submit" th:name="action" th:value="payNow">Pay now</button>
+    <button type="submit" th:name="action" th:value="payLater">Pay later</button>
 </form>
 
 <style>

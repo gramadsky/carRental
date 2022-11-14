@@ -28,7 +28,10 @@
                 <th>class</th>
                 <th>cost</th>
                 <th>availability</th>
+                <th><span style="color: red" th:if="${errorMessage}"  th:text="${errorMessage}">Error</span>
+                </th>
             </tr>
+
             </thead>
             <tbody>
             <tr th:each="car : ${cars}">
@@ -38,10 +41,6 @@
                 <td th:text="${car.cost}"></td>
                 <td th:text="${car.availability}"></td>
                 <td><a th:href="@{/chooseCar/{id}(id=${car.id})} ">Select a car</a>
-
-                    <!--                    <div style="color: red" th:if="${#fields.hasErrors('car.availability')}"-->
-                    <!--                         th:errors="${car.availability}">error-->
-                    <!--                    </div>-->
                 </td>
             </tr>
             </tbody>

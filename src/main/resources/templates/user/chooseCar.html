@@ -13,7 +13,7 @@
         <a id=logout href="/logout">Logout</a>
     </h4>
 </div>
-    <form  th:method="POST" th:action="@{order/{id}(id=${order.id})}" th:object="${order}">
+    <form  th:method="POST" th:action="@{{id}(id=${order.id})}">
         <label>Selected car: </label><br/>
         <strong th:text="${car.carModel}">value</strong><br/><br/>
         Car class:
@@ -22,16 +22,16 @@
         <strong th:text="${car.cost}">value</strong>
         <br/>
         <br/>
-        <label for="date1">Enter the rental start date: </label><br/><br/>
-        <input type="date" th:field="*{startOfRental}" id="date1"/>
+        <label">Enter the rental start date: </label><br/><br/>
+        <input type="date" th:field="${order.startOfRental}"/>
         <br/>
         <br/>
-        <label for="date2">Enter the rental end date: </label><br/><br/>
-        <input type="date" th:field="*{endOfRental}" id="date2"/>
+        <label>Enter the rental end date: </label><br/><br/>
+        <input type="date" th:field="${order.endOfRental}"/>
         <br/>
         <br/>
-        <label for="passport">Enter the passport data: </label><br/><br/>
-        <input type="text" th:field="*{passportData}" id="passport"/>
+        <label>Enter the passport data: </label><br/><br/>
+        <input type="text" th:name="user.passportData" th:value="${user.passportData}" placeholder="*{user.passportData}" />
         <br/>
         <br/>
         <input type="submit" value="Save Order"/>

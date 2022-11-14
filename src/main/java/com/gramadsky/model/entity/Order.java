@@ -24,8 +24,6 @@ public class Order {
     @Column(name = "endofrental")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endOfRental;
-    @Column(name = "passportdata")
-    private String passportData;
     @Column
     private Float reduction;
     @Column

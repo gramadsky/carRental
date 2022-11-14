@@ -36,7 +36,7 @@ public class AuthController {
 
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("login") @Valid Login login,
-                                      @ModelAttribute("user") User user,
+                                      @ModelAttribute("user") @Valid User user,
                                       BindingResult bindingResult) {
         loginValidator.validate(login, bindingResult);
         if (bindingResult.hasErrors())

@@ -43,7 +43,7 @@
                 <td th:text="${order.car.carModel}"></td>
                 <td th:text="${order.startOfRental}"></td>
                 <td th:text="${order.endOfRental}"></td>
-                <td th:text="${order.passportData}"></td>
+                <td th:text="${order.user.passportData}"></td>
                 <td th:text="${order.reduction}"></td>
                 <td th:text="${order.price}"></td>
                 <td th:text="${order.status.displayName}"></td>
@@ -61,7 +61,6 @@
 </div>
 <style>
 
-<!--${order.status} == 'WAITING_PAYMENT'-->
 		body{
 <!--		background: rgb(52, 56, 61);-->
 		color: rgb(255, 255, 255);
