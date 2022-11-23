@@ -2,8 +2,10 @@ package com.gramadsky.model.entity;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -28,14 +30,23 @@ public class Order {
     private Float reduction;
     @Column
     private Float price;
+    @Column(name = "repairbill")
+    private Integer repairBill;
     @Column
+    @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(name = "creationtime")
+    private LocalDateTime creationTime;
 
-    public  enum Status {
+    public enum Status {
         CONFIRMED("CONFIRMED"),
         DENIED("DENIED"),
         PAID_WAITING_CONFIRMATION("PAID, WAITING CONFIRMATION"),
-        WAITING_PAYMENT("WAITING PAYMENT");
+        WAITING_PAYMENT("WAITING PAYMENT"),
+        CAR_RETURN("CAR RETURN"),
+        CAR_DAMAGED("CAR DAMAGED"),
+        WAITING_FOR_PAYMENTS_FOR_REPAIR("WAITING FOR PAYMENTS FOR REPAIR"),
+        COMPLETED("COMPLETED");
 
         private final String displayName;
 

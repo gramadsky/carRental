@@ -2,12 +2,17 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Users</title>
+    <title>Cars</title>
 
+    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
@@ -35,35 +40,34 @@
 
 <div class="container wb">
     <div class="row centered">
-        <h1>All users</h1></br>
-        <table class="table table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Date of birth</th>
-                <th>Passport data</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="login : ${logins}">
-                <td th:text="${login.id}"></td>
-                <td th:text="${login.username}"></td>
-                <td th:text="${login.user.name}"></td>
-                <td th:text="${login.user.surname}"></td>
-                <td th:text="${login.user.dateOfBirth}"></td>
-                <td th:text="${login.user.passportData}"></td>
-                <td th:text="${login.user.email}"></td>
-                <td th:text="${login.role}"></td>
-                <td th:text="${login.user.status}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <form role="form" th:method="POST" th:action="@{/admin/calculateRepair/{id}(id=${order.id})}">
+            Model:
+            <strong th:text="${car.carModel}">value</strong><br/><br/>
+            Class:
+            <strong th:text="${car.carClass}">value</strong><br/><br/>
+            Transmission:
+            <strong th:text="${car.transmission}">value</strong><br/><br/>
+            Total cost of the car:
+            <strong th:text="${car.totalCostCar}">value</strong><br/><br/>
+            Fuel consumption:
+            <strong th:text="${car.fuelConsumption}">value</strong><br/><br/>
+            Engine Volume:
+            <strong th:text="${car.engineVolume}">value</strong><br/><br/>
+            Car cost per day:
+            <strong th:text="${car.cost}">value</strong><br/><br/>
+            Car condition:
+            <strong th:text="${car.carStatus}">value</strong><br/><br/>
+            <select th:name="damage">
+                <option value="">Select degree of damage</option>
+                <option th:each="damage : ${damages}"
+                        th:value="${damage.damagePercentage}"
+                        th:text="${damage.title}">
+                </option>
+            </select>
+            <br/>
+            <br/>
+            <input type="submit" class="btn btn-success btn-md btn-block" value="calculate"/>
+        </form>
     </div>
 </div>
 
@@ -85,6 +89,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

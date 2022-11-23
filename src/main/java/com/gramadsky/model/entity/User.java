@@ -30,7 +30,8 @@ public class User {
     @Column(name="passportdata")
     private String passportData;
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @OneToOne(mappedBy = "user")
     private Login login;
@@ -39,6 +40,22 @@ public class User {
     private List<Order> orderList = new ArrayList<>();
 
     public User() {
+    }
+
+    public  enum Status {
+        NO_DEBTS("NO DEBTS"),
+        INVOICE_NOT_PAID("INVOICE NOT PAID"),
+        REPAIR_NOT_PAID("REPAIR NOT PAID");
+
+        private final String displayName;
+
+        Status(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 
     @Override

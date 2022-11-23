@@ -2,94 +2,117 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Pay the order</title>
+    <title>Cars</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <style>
+
+    </style>
 </head>
 <body>
-<div id="header">
-    <h1>Car Rental </h1>
-    <h4>
-        <a id=hello href="/hello">Car list</a>
-        <a id=orders href="/orders">My orders</a>
-        <a id=logout href="/logout">Logout</a>
-    </h4>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/hello">CAR RENTAL GRODNO</a>
+        </div>
+        <div class="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id=hello href="/hello">Car park</a></li>
+                <li><a id=profile href="/myProfile">My profile</a></li>
+                <li><a id=orders href="/orders">My orders</a></li>
+                <li><a id=logout href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
-<h1>Pay the order</h1>
-<form th:method="POST" th:action="@{order/{id}(id=${order.id})}" th:object="${order}">
-    <label>Selected car: </label><br/>
-    <strong th:text="${order.car.carModel}">value</strong><br/><br/>
-    Car class:
-    <strong th:text="${order.car.carClass}">value</strong><br/><br/>
-    Car cost:
-    <strong th:text="${order.car.cost}">value</strong>
-    <br/>
-    <br/>
-    <label>Rental start date: </label><br/>
-    <strong th:text="${order.startOfRental}">value</strong>
-    <br/>
-    <br/>
-    <label>Rental end date: </label><br/>
-    <strong th:text="${order.endOfRental}">value</strong>
-    <br/>
-    <br/>
-    <label>Passport data: </label><br/>
-    <strong th:text="${order.user.passportData}">value</strong>
-    <br/>
-    <br/>
-    <label>Discount: </label><br/>
-    <strong th:text="${order.reduction}">value</strong>
-    <br/>
-    <br/>
-    <label>Payable: </label><br/>
-    <strong th:text="${order.price}">value</strong>
-    <br/>
-    <br/>
-    <button type="submit" th:name="action" th:value="payNow">Pay now</button>
-    <button type="submit" th:name="action" th:value="payLater">Pay later</button>
-</form>
+<div id="headerwrap">
+    <div class="container">
+        <div class="row centered">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h1>Car Rental in Crodno</h1>
+            </div>
+        </div>
+    </div>
+</div>
 
-<style>
+<div class="container wb">
+    <div class="row centered">
+        <h1>Pay the order</h1>
+        <form th:method="POST" th:action="@{order/{id}(id=${order.id})}" th:object="${order}">
+            <label>Selected car: </label><br/>
+            <strong th:text="${order.car.carModel}">value</strong><br/><br/>
 
-		body{
-<!--		background: rgb(52, 56, 61);-->
-		color: rgb(255, 255, 255);
+            <label>Class: </label><br/>
+            <strong th:text="${order.car.carClass}">value</strong><br/><br/>
 
-		text-align: center;
-		}
+            <label>Cost: </label><br/>
+            <strong th:text="${order.car.cost}">value</strong><br/><br/>
 
-		#href{
-        color: rgb(255, 255, 255);
-		}
+            <label>Rental start date: </label><br/>
+            <strong th:text="${order.startOfRental}">value</strong><br/><br/>
 
-		#logout, #hello, #orders {
-        margin-top: 20px;
-        line-height: 38px;
-        font-size: 93%;
-        padding: 0 25px;
-        background: white;
-        border: 2px solid rgb(112, 182, 234);
-        border-radius: 35px;
-        position: relative;
-        left: 35%;
-        transform: translate(-55%, 0);
-        }
-        button:hover {
-        transition: 0.3s linear;
-        background: rgb(112, 182, 234);
-        color: white;
-        }
+            <label>Rental end date: </label><br/>
+            <strong th:text="${order.endOfRental}">value</strong><br/><br/>
 
-<!--		body{-->
-<!--		background: rgb(52, 56, 61);-->
-<!--		color: rgb(255, 255, 255);-->
-<!--		text-align: center;-->
-<!--		}-->
+            <label>Passport data: </label><br/>
+            <strong th:text="${order.user.passportData}">value</strong><br/><br/>
 
-<!--        #n{-->
-<!--        text-align: left;-->
-<!--        }-->
+            <label>To pay: </label><br/>
+            <h3 th:text="${order.price}">value</h3>
+
+            <button type="submit" class="btn btn-success" th:name="action" th:value="payNow">Pay now</button>
+            <button type="submit" class="btn btn-warning" th:name="action" th:value="payLater">Pay later</button>
+        </form>
+    </div>
+</div>
+
+        <div class="container wb">
+            <div class="row centered">
+                <br/><br/>
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h4>Why rent with Car Rental Grodno?</h4>
+                    <p>Unlimited miles on standard vehicles</p>
+                    <p>Car rental made quick and easy</p>
+                    <p>Friendly 24/7 customer service</p>
+                    <p><br/><br/></p>
+                </div>
+                <div class="col-lg-2"></div>
+                <div class="col-lg-10 col-lg-offset-1"></div>
+                <img src="img/dsfds" alt="" class="img-responsive">
+            </div>
+        </div>
+
+        <div id="f">
+            <div class="container">
+                <div class="row centered">
+                    <a href="#">Twitter<i class="fa fa-twitter"></i></a>
+                    <a href="#">Facebook<i class="fa fa-facebook"></i></a>
+                    <a href="#">Instagram<i class="fa fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <style>
 
 
-
-</style>
+        </style>
 </body>
 </html>

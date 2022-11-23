@@ -1,6 +1,7 @@
 package com.gramadsky.model.entity;
 
 import lombok.Data;
+
 import javax.persistence.*;
 
 @Data
@@ -14,7 +15,8 @@ public class Login {
     @Column
     private String password;
     @Column
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -23,4 +25,10 @@ public class Login {
     public Login() {
     }
 
+    public enum Role {
+        ROLE_ADMIN(),
+        ROLE_CLIENT();
+    }
 }
+
+

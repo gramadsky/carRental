@@ -1,6 +1,7 @@
 package com.gramadsky.service.impl;
 
 
+import com.gramadsky.model.entity.Login;
 import com.gramadsky.model.entity.Order;
 import com.gramadsky.model.entity.User;
 import com.gramadsky.security.repositories.UsersRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UsersRepository repository;
-    private final RegistrationService registrationService;
+
     @Override
 
     public List<User> findAll() {
@@ -39,10 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(Order order, Model model) {
-        User user = registrationService.findRegisteredUser();
-        user.setPassportData(order.getUser().getPassportData());
-        model.addAttribute("user", user);
+    public void updateUser(User user) {
         repository.save(user);
     }
 }

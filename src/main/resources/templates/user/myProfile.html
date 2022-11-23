@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Cars</title>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
@@ -13,7 +12,9 @@
             crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <style>
 
+    </style>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -47,67 +48,52 @@
 </div>
 
 <div class="container wb">
-    <div class="row centered">
-        <div class="col-lg-8 col-lg-offset-2">
-            <form role="form" th:method="POST" th:action="@{{id}(id=${order.id})}">
+    <div>
+        <div class="col-lg-4">
+            <h1>Personal data</h1>
+            <span style="color: green" th:if="${message1}" th:text="${message1}">message</span>
+            <form role="form" th:method="POST" th:action="@{/changeProfile}">
                 <div class="form-group">
-                    <h3 th:text="${car.carModel}">value</h3></br>
-                    Car class:
-                    <strong th:text="${car.carClass}">value</strong><br/><br/>
-                    Car cost:
-                    <strong th:text="${car.cost}">value</strong><strong> $/day</strong>
-                    <br/>
-                    <br/>
-                    <p>Passport data: </p>
-                    <strong th:if="${user.passportData != null}" th:text="${user.passportData}">value</strong><br/>
-                    <input th:if="${user.passportData == null}" type="text" th:name="passportData"
-                           th:field="${user.passportData}"/>
-                    <span style="color: red" th:if="${errorMessage1}" th:text="${errorMessage1}">Error</span>
-                    <br/>
-
-                    <label>Enter the rental start date: </label><br/>
-                    <input type="date" th:field="${order.startOfRental}"/><br/>
-                    <span style="color: red" th:if="${errorMessage2}" th:text="${errorMessage2}">Error</span>
-                    <span style="color: red" th:if="${errorMessage3}" th:text="${errorMessage3}">Error</span>
-                    <br/>
-                    <label>Enter the rental end date: </label><br/>
-                    <input type="date" th:field="${order.endOfRental}"/><br/>
-                    <span style="color: red" th:if="${errorMessage4}" th:text="${errorMessage4}">Error</span>
-                    <span style="color: red" th:if="${errorMessage5}" th:text="${errorMessage5}">Error</span>
-                    <span style="color: red" th:if="${errorMessage6}" th:text="${errorMessage6}">Error</span>
-                    <br/>
-                    <input type="submit" class="btn btn-success" value="Save Order"/>
+                    Name:
+                    <strong class="form-control" th:text="${user.name}">value</strong><br/>
+                    Surname:
+                    <strong class="form-control" th:text="${user.surname}">value</strong><br/>
+                    Date of birth:
+                    <strong class="form-control" th:text="${user.dateOfBirth}">value</strong><br/>
+                    Email:
+                    <input type="email" class="form-control" th:name="email" th:value="*{user.email}"
+                           placeholder="*{user.email}"/><br/>
+                    Passport data:<br/>
+                    <input class="form-control" th:if="${user.passportData != null}" type="text" th:name="passportData"
+                           th:value="${user.passportData}"
+                           placeholder="*{user.passportData}"/>
+                    <input class="form-control" th:if="${user.passportData == null}" type="text"
+                           th:field="${user.passportData}"/><br/>
+                    You status:<br/>
+                    <strong class="form-control" th:text="${user.status.displayName}">value</strong><br/>
+                    <button type="submit" class="btn btn-primary">Change personal data</button>
                 </div>
+            </form>
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-4">
+            <h1>Change password</h1>
+            <form role="form" th:method="POST" th:action="@{/changePassword}">
+                Enter old password:<br/>
+                <input type="password" class="form-control" th:name="oldPassword"/>
+                <span style="color: red" th:if="${errorMessage}" th:text="${errorMessage}">Error</span></br>
+                Enter new password:<br/>
+                <input type="password" class="form-control" th:name="newPassword"/><br/>
+                Confirm the password:<br/>
+                <input type="password" class="form-control" th:name="confirmPassword"/></br>
+                <span style="color: red" th:if="${errorMessage2}" th:text="${errorMessage2}">Error</span></br>
+                <input type="submit" class="btn btn-primary" value="Change password"/><br/>
+                <span style="color: green" th:if="${message}" th:text="${message}">message</span>
             </form>
         </div>
     </div>
 </div>
-
-<div class="container wb">
-    <div class="row centered">
-        <div th:if="${!carOrders.empty}"><h3>All orders this car: </h3>
-            <table border="1" width="100%">
-                <thead>
-                <tr>
-                    <th>Start of rental</th>
-                    <th>End Of Rental</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="order : ${carOrders}">
-                    <td th:text="${order.startOfRental}"></td>
-                    <td th:text="${order.endOfRental}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div th:if="${carOrders.empty}"><h3>This will be the first order for this car!</h3>
-        </div>
-    </div>
-</div>
-<br/>
-<br/>
-
 <div class="container wb">
     <div class="row centered">
         <br/><br/>

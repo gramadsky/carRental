@@ -1,6 +1,8 @@
 package com.gramadsky.service;
 
 import com.gramadsky.model.entity.Order;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public interface OrderService {
@@ -13,7 +15,7 @@ public interface OrderService {
 
     void deleteOrder(Integer id);
 
-    List<Order> findByUserId(Integer id);
-
     Order findByLastId();
+
+    Page<Order> findPaginated(int pageNo, int pageSize);
 }

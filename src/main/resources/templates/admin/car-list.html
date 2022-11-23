@@ -3,106 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <title>Cars</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
 </head>
 <body>
 
-<div id="header">
-    <h1>Car Rental </h1>
-    Hello, Admin!
-    <h4>
-        <a id=car href="/admin/newCar">Add new car</a>
-        <a id=cars title="list of all cars" href="/admin/cars">Cars</a>
-        <a id=orders title="list of all orders" href="/admin/orders">Orders</a>
-        <a id=users title="list of all users" href="/admin/users">Users</a>
-        <a id=logout href="/logout">Logout</a>
-    </h4>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/hello">CAR RENTAL GRODNO</a>
+        </div>
+        <div class="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/admin/newCar">Add New car</a></li>
+                <li><a href="/admin/cars">Cars</a></li>
+                <li><a href="/admin/orders">Orders</a></li>
+                <li><a href="/admin/users">Users</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
-<div th:switch="${cars}">
-    <h2 th:case="null">No cars found!</h2>
-    <div th:case="*">
-        <h3>Cars</h3>
-        <table>
+<div class="container wb">
+    <div class="row centered">
+        <h1>All cars</h1>
+        <table class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th>Id</th>
-                <th>model</th>
-                <th>class</th>
-                <th>cost</th>
-                <th>availability</th>
+                <th>Model</th>
+                <th>Class</th>
+                <th>Total cost</th>
+                <th>Fuel consumption</th>
+                <th>Engine volume</th>
+                <th>Transmission</th>
+                <th>Price per day</th>
+                <th>Condition</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="car : ${cars}">
+
+            <tr th:each="car : ${listCars}">
                 <td th:text="${car.id}"></td>
-                <td th:text="${car.carModel}"></td>
+                <td>
+                    <a th:text="${car.carModel}" th:href="@{/admin/selectCar/{id}(id=${car.id})}"></a>
+                </td>
                 <td th:text="${car.carClass}"></td>
+                <td th:text="${car.totalCostCar}"></td>
+                <td th:text="${car.fuelConsumption}"></td>
+                <td th:text="${car.engineVolume}"></td>
+                <td th:text="${car.transmission}"></td>
                 <td th:text="${car.cost}"></td>
-                <td th:text="${car.availability}"></td>
-                <td><a th:href="@{/admin/selectCar/{id}(id=${car.id})} ">Select a car</a>
-<!--                <td>-->
-<!--                    <form th:method="POST" th:action="@{delete/{id}(id=${car.id})}">-->
-<!--                        <button type="submit" th:name="action" th:value="Delete">Delete</button>-->
-<!--                    </form>-->
-<!--                </td>-->
+                <td th:text="${car.carStatus}"></td>
+
+                <!--                <td>-->
+                <!--                    <form th:method="POST" th:action="@{delete/{id}(id=${car.id})}">-->
+                <!--                        <button type="submit" th:name="action" th:value="Delete">Delete</button>-->
+                <!--                    </form>-->
+                <!--                </td>-->
             </tr>
             </tbody>
         </table>
     </div>
+    <nav>
+        <div th:if="${totalPages > 1}">
+            Total Rows: [[${totalItems}]]&nbsp;&nbsp;&nbsp;&nbsp;
+            <span th:each="i: ${#numbers.sequence( 1, totalPages)}">
+                    <a th:if="${currentPage != i}" th:href="@{'/admin/cars/' + ${i}}">[[${i}]]</a>
+                    <span th:unless="${currentPage !=i}" aria-hidden="true">[[${i}]]</span> &nbsp;
+                </span>
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{'/admin/cars/' + ${currentPage +1}}">Next</a>
+            <span th:unless="${currentPage < totalPages}" aria-hidden="true">Next</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a th:if="${currentPage < totalPages}" th:href="@{'/admin/cars/' + ${totalPages}}">Last</a>
+            <span th:unless="${currentPage < totalPages}" aria-hidden="true">Last</span>
+        </div>
+    </nav>
 </div>
 
-<style>
-
-		body{
-<!--		background: rgb(52, 56, 61);-->
-		color: rgb(255, 255, 255);
-
-		text-align: center;
-		}
-
-		#href{
-        color: rgb(255, 255, 255);
-		}
-
-		#logout, #users, #cars, #car, #orders {
-        margin-top: 20px;
-        line-height: 38px;
-        font-size: 93%;
-        padding: 0 25px;
-        background: white;
-        border: 2px solid rgb(112, 182, 234);
-        border-radius: 35px;
-        position: relative;
-        left: 35%;
-        transform: translate(-55%, 0);
-        }
-        button:hover {
-        transition: 0.3s linear;
-        background: rgb(112, 182, 234);
-        color: white;
-        }
-
-
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-
-tr:nth-child(even) {
-    background-color: #dddddd;
-}
-
-
-
-
-
-</style>
+<div class="container wb">
+    <div class="row centered">
+        <br/><br/>
+        <div class="col-lg-8 col-lg-offset-2">
+            <h4></h4>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p><br/><br/></p>
+        </div>
+    </div>
+</div>
+<div id="f">
+    <div class="container">
+        <div class="row centered">
+        </div>
+    </div>
+</div>
 </body>
 </html>

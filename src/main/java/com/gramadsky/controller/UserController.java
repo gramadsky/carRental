@@ -1,131 +1,120 @@
 package com.gramadsky.controller;
 
-import com.gramadsky.model.entity.Car;
 import com.gramadsky.model.entity.Order;
-import com.gramadsky.model.entity.User;
-import com.gramadsky.security.repositories.UsersRepository;
 import com.gramadsky.security.services.RegistrationService;
 import com.gramadsky.service.impl.CarServiceImpl;
 import com.gramadsky.service.impl.OrderServiceImpl;
-import com.gramadsky.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class UserController {
-
     private final CarServiceImpl carService;
     private final OrderServiceImpl orderService;
     private final RegistrationService registrationService;
-    private final UserServiceImpl userRepository;
-//    private final UsersRepository usersRepository;
 
     @GetMapping("/hello")
     public String cars(Model model) {
-        List<Car> cars = carService.findAll();
-        String name = registrationService.findRegisteredUser().getName();
-        model.addAttribute("cars", cars);
-        model.addAttribute("name", name);
+        return carService.carList(model);
+    }
 
-        if (registrationService.findLoginRole().equals("ROLE_ADMIN")) {
-            return "admin/car-list";
-        }
-        return "user/car-list";
+    @GetMapping("/detailedInformation/{id}")
+    public String choose(@PathVariable("id") Integer id,
+                         Model model) {
+        carService.detailingInformation(id, model);
+        return "user/detailedInformationCar";
     }
 
     @GetMapping("/chooseCar/{id}")
     public String chooseCar(@PathVariable("id") Integer id,
                             @ModelAttribute("order") Order order,
                             Model model) {
-        Car car = carService.findById(id);
-        if (!car.getAvailability().equals("available")) {
-            model.addAttribute("errorMessage", "This car is busy. Please choose another car.");
-            List<Car> cars = carService.findAll();
-            model.addAttribute("cars", cars);
-            return "user/car-list";
-        } else {
-            User user = registrationService.findRegisteredUser();
-            model.addAttribute("car", car);
-            model.addAttribute("user", user);
-            return "user/chooseCar";
-        }
+        return carService.selectCar(id, model);
     }
 
     @PostMapping("/chooseCar/{id}")
-    public String newOrder(@PathVariable("id") Integer id, @ModelAttribute("order") Order order, Model model) {
-        Car car = carService.findById(id);
-        model.addAttribute("car", car);
-
-        userRepository.updateUser(order,model);
-//        User user = registrationService.findRegisteredUser();
-//        user.setPassportData(order.getUser().getPassportData());
-//        model.addAttribute("user", user);
-//        usersRepository.save(user);
-
-        car.setAvailability("busy until " + order.getEndOfRental());
-        carService.updateCar(car);
-        order.setCar(car);
-        order.setUser(registrationService.findRegisteredUser());
-        order.setStatus(Order.Status.WAITING_PAYMENT);
-        orderService.calculationRent(order, car);
-        orderService.save(order);
-
-        return "user/payOrder";
+    public String createNewOrder(@PathVariable("id") Integer id,
+                                 @RequestParam(required = false) String passportData,
+                                 @ModelAttribute("order") Order order, Model model) {
+        return orderService.creteNewOrder(id, order, model, passportData);
     }
 
     @PostMapping("chooseCar/order/{id}")
-    public String saveOrder(@RequestParam("action") String name,
-                            @PathVariable("id") Integer id, Model model) {
-        Order order = orderService.findByLastId();
-        if (name.equals("payNow")) {
-            order.setStatus(Order.Status.PAID_WAITING_CONFIRMATION);
-            model.addAttribute("order", order);
-            orderService.save(order);
-            return "redirect:/hello";
-        } else {
-            Integer idUser = registrationService.findRegisteredUser().getId();
-            List<Order> orders = orderService.findByUserId(idUser);
-            model.addAttribute("orders", orders);
-            return "user/orders";
-        }
+    public String saveNewOrder(@RequestParam("action") String name) {
+        return orderService.updateNewOrder(name);
     }
 
     @GetMapping("/orders")
     public String myOrders(Model model) {
-        Integer id = registrationService.findRegisteredUser().getId();
-        List<Order> orders = orderService.findByUserId(id);
-        model.addAttribute("orders", orders);
-        return "user/orders";
+
+        return orderService.myOrdersList(model);
     }
 
     @PostMapping("/pay/{id}")
     public String pay(@PathVariable("id") Integer id,
                       Model model) {
-        Order order = orderService.findById(id);
-        order.setStatus(Order.Status.PAID_WAITING_CONFIRMATION);
-        model.addAttribute("order", order);
-//        orderService.save(order);
-        return "user/payOrder";
+        return orderService.selectUnpaidOrder(id, model);
     }
 
     @PostMapping("pay/order/{id}")
-    public String payOrder(@RequestParam("action") String name,
-                           @PathVariable("id") Integer id, Model model) {
-        Order order = orderService.findById(id);
-        Integer idUser = registrationService.findRegisteredUser().getId();
-        List<Order> orders = orderService.findByUserId(idUser);
-        model.addAttribute("orders", orders);
-        if (name.equals("payNow")) {
-            order.setStatus(Order.Status.PAID_WAITING_CONFIRMATION);
-            model.addAttribute("order", order);
-            orderService.save(order);
-        }
-        return "user/orders";
+    public String payOrder(@PathVariable("id") Integer id,
+                           @RequestParam("action") String name) {
+        return orderService.payOrder(id, name);
+    }
 
+    @GetMapping("/myProfile")
+    public String myProfile(Model model) {
+        return registrationService.goToMyProfile(model);
+    }
+
+    @PostMapping("/changeProfile")
+    public String changeProfile(@RequestParam(value = "email", required = false) String email,
+                                @RequestParam(value = "passportData", required = false) String passportData,
+                                Model model) {
+        return registrationService.changeProfile(email, passportData, model);
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
+                                 @RequestParam(value = "newPassword", required = false) String newPassword,
+                                 @RequestParam(value = "confirmPassword", required = false) String confirmPassword,
+                                 Model model) {
+        return registrationService.changePassword(oldPassword, newPassword, confirmPassword, model);
+    }
+
+    @PostMapping("/returnCar/{id}")
+    public String returnCar(@PathVariable("id") Integer id) {
+        Order order = orderService.findById(id);
+        order.setStatus(Order.Status.CAR_RETURN);
+        orderService.save(order);
+        log.info(order + " status has been updated");
+
+        return "redirect:/orders";
+    }
+
+    @GetMapping("/payForRepairs/{id}")
+    public String payForRepair(@PathVariable("id") Integer id,
+                               Model model) {
+        Order order = orderService.findById(id);
+        model.addAttribute("order", order);
+        return "user/payRepairs";
+    }
+
+    @PostMapping("/payForRepairs/order/{id}")
+    public String payForRepair(@PathVariable("id") Integer id) {
+        return orderService.payRepair(id);
+    }
+
+
+    @GetMapping("/sortCar")
+    public String sortCar(@RequestParam("class") String nameClass, Model model) {
+        carService.sortCar(nameClass, model);
+        return "user/car-list";
     }
 }
+

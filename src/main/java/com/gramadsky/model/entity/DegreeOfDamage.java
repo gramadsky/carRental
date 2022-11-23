@@ -6,12 +6,13 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class DamageList {
+@Table(name = "degreeofdamage")
+public class DegreeOfDamage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column
     private String title;
-    @Column
-    private float repairCost;
+    @Column(name = "damagepercentage")
+    private Integer damagePercentage;
 }
