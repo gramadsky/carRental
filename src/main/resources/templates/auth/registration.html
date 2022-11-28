@@ -30,8 +30,8 @@
 <div id="wrapper">
     <form id="signin" th:method="POST" th:action="@{/auth/registration}">
         <input type="text" th:field="*{login.username}" id="username" placeholder="username"/>
-        <p th:if="${#fields.hasErrors('login.username')}" th:class="${#fields.hasErrors('login.username')}? error">
-            Username Error</p>
+        <span style="color: red" th:if="${error}" th:text="${error}">Error</span>
+        <!--        <p th:if="${#fields.hasErrors('login.username')}" th:class="${#fields.hasErrors('login.username')}? error">Username Error</p>-->
         <!--        <p style="color:red" th:if="${#fields.hasErrors('login.username')}">Username Error</p>-->
         <br/>
         <input type="password" th:name="password" placeholder="password">

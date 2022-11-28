@@ -35,9 +35,11 @@
 <div class="container wb">
     <div class="row centered">
         <h2>Add new car</h2>
-        <form th:method="POST" th:action="@{/admin/saveNewCar}">
+        <form th:method="POST" th:action="@{/admin/saveNewCar}" enctype="multipart/form-data">
             Car model:
             <input type="text" th:field="*{car.carModel}"/><br/><br/>
+            Car year:
+            <input type="text" th:field="*{car.year}"/><br/><br/>
             Car class:
             <select th:name="nameClass">
                 <option value="">Select car class</option>
@@ -75,29 +77,14 @@
                 </option>
             </select>
             <br/>
+            Add image:
+            <input type="file" th:name="file"/><br/>
+            <br/>
             <br/>
             <input type="submit" value="Save new car"/>
         </form>
     </div>
 </div>
 
-<div class="container wb">
-    <div class="row centered">
-        <br/><br/>
-        <div class="col-lg-8 col-lg-offset-2">
-            <h4></h4>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p><br/><br/></p>
-        </div>
-    </div>
-</div>
-<div id="f">
-    <div class="container">
-        <div class="row centered">
-        </div>
-    </div>
-</div>
 </body>
 </html>

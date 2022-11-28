@@ -25,14 +25,15 @@ public class UserController {
 
     @GetMapping("/detailedInformation/{id}")
     public String choose(@PathVariable("id") Integer id,
+                         @ModelAttribute("order") Order order,
                          Model model) {
-        carService.detailingInformation(id, model);
-        return "user/detailedInformationCar";
+        return carService.detailingInformation(id, model);
+
     }
 
     @GetMapping("/chooseCar/{id}")
     public String chooseCar(@PathVariable("id") Integer id,
-                            @ModelAttribute("order") Order order,
+
                             Model model) {
         return carService.selectCar(id, model);
     }
@@ -89,11 +90,7 @@ public class UserController {
 
     @PostMapping("/returnCar/{id}")
     public String returnCar(@PathVariable("id") Integer id) {
-        Order order = orderService.findById(id);
-        order.setStatus(Order.Status.CAR_RETURN);
-        orderService.save(order);
-        log.info(order + " status has been updated");
-
+        orderService.changeOrderStatusToCarReturn(id);
         return "redirect:/orders";
     }
 
@@ -113,7 +110,7 @@ public class UserController {
 
     @GetMapping("/sortCar")
     public String sortCar(@RequestParam("class") String nameClass, Model model) {
-        carService.sortCar(nameClass, model);
+        carService.sortCarByNameClass(nameClass, model);
         return "user/car-list";
     }
 }

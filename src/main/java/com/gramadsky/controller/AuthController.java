@@ -40,8 +40,10 @@ public class AuthController {
                                       @RequestParam("confirmPassword") String confirmPassword,
                                       Model model, BindingResult bindingResult) {
         loginValidator.validate(login, bindingResult);
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "This username is already taken");
             return "/auth/registration";
+        }
         return registrationService.register(login, user, password, confirmPassword, model);
     }
 }

@@ -7,9 +7,12 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
+
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 
@@ -32,48 +35,81 @@
     </div>
 </div>
 
+
 <div class="container wb">
     <div class="row centered">
-        <h3 th:text="${car.carModel}"></h3>
-        <h4>Update parametrs</h4>
-        <form th:method="POST" th:action="@{/admin/updateCar/{id}(id=${car.id})}">
-            Class:
-            <strong >value</strong><br/><br/>
-            Transmission:
-            <strong th:text="${car.transmission}">value</strong><br/><br/>
-            Total cost of the car:
-            <input type="number" th:name="totalCostCar" th:field="*{car.totalCostCar}"
-                   placeholder="*{car.totalCostCar}"/><br/><br/>
-            Fuel consumption:
-            <input type="number" th:name="fuelConsumption" th:field="*{car.fuelConsumption}"
-                   placeholder="*{car.fuelConsumption}"/><br/><br/>
-            Engine Volume:
-            <input type="number" th:name="engineVolume" th:field="*{car.engineVolume}"
-                   placeholder="*{car.engineVolume}"/><br/><br/>
-            Car cost:
-            <input type="text" th:name="cost" th:value="*{car.cost}" placeholder="*{car.cost}"/><br/><br/>
-            Car condition:
-            <strong th:text="${car.carStatus}">value</strong><br/><br/>
-            <select th:name="status">
-                <option th:each="status : ${carStatuses}"
-                        th:value="${status}"
-                        th:text="${status}"
-                        th:selected="${carStatus}">
-                </option>
-            </select>
-            <br/>
-            <br/>
-            <br/>
-            <input type="submit" value="Update car"/>
+        <form th:method="POST" th:action="@{/admin/updateCar/{id}(id=${car.id})}" enctype="multipart/form-data">
+
+            <div class="col-lg-6">
+                <h4 th:text="${car.carModel}">value</h4>
+                <h5 th:text="${car.year}">value</h5>
+                <img th:src="@{'data:image/jpeg;base64,'+${car.imageCar}}" height="200px"/></br></br>
+                <div>
+                    <label>
+                        <input type="file" th:name="file" class="btn btn-primary"/><br/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <h3 th:text="${car.carModel}"></h3>
+                <h5 th:text="${car.year}"></h5>
+                Class:
+                <strong th:text="${car.carClass}">value</strong><br/><br/>
+                Transmission:
+                <strong th:text="${car.transmission}">value</strong><br/><br/>
+                Total cost of the car:
+                <input class="form-control" type="number" th:name="totalCostCar" th:field="*{car.totalCostCar}"
+                       placeholder="*{car.totalCostCar}"/>
+                Fuel consumption:
+                <input class="form-control" type="number" th:name="fuelConsumption" th:field="*{car.fuelConsumption}"
+                       placeholder="*{car.fuelConsumption}"/>
+                Engine Volume:
+                <input class="form-control" type="number" th:name="engineVolume" th:field="*{car.engineVolume}"
+                       placeholder="*{car.engineVolume}"/>
+                Car cost:
+                <input class="form-control" type="text" th:name="cost" th:value="*{car.cost}"
+                       placeholder="*{car.cost}"/></br>
+                <div class="form-group">
+                    <label for="sel1">Car condition:</label>
+                    <strong th:text="${car.carStatus}">value</strong>
+                    <select id="sel1" th:name="status">
+                        <option th:each="status : ${carStatuses}"
+                                th:value="${status}"
+                                th:text="${status}"
+                                th:selected="${carStatus}">
+                        </option>
+                    </select>
+                </div>
+                <br/>
+                <!--            <div class="row centered">-->
+                <!--                <label class="btn btn-primary">-->
+                <!--                    <span class="glyphicon glyphicon-upload"></span>-->
+                <!--                    <span>Upload picture</span>-->
+                <!--                    <input type="file" th:name="file" class="hidden">-->
+                <!--                </label>-->
+                <!--            </div>-->
+                <br/>
+                <!--            <div>-->
+                <!--                <div class="input-group-btn">-->
+                <!--                    <label for="files" class="btn btn-default">browse</label>-->
+                <!--                    <input id="files" type="file" th:name="file" class="btn btn-default"  style="visibility:hidden;"/>-->
+                <!--                </div>-->
+                <!--            </div>-->
+
+                <br/>
+
+                <br/>
+
+            </div>
+            <input type="submit" class="btn btn-primary btn-md btn-block" value="Update car"/>
         </form>
     </div>
 </div>
 
-<div class="container wb" th:switch="${orders}">
+<div class="container wb">
     <div class="row centered">
-        <h1>Car order list</h1>
-        <h3 th:case="null">No orders found!</h3>
-        <div th:case="*">
+        <div th:if="${!orders.empty}"><h3>All orders this car: </h3>
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>

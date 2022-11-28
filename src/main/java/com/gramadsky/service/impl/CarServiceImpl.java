@@ -1,10 +1,7 @@
 package com.gramadsky.service.impl;
 
 import com.gramadsky.model.entity.*;
-import com.gramadsky.model.repository.CarClassRepository;
-import com.gramadsky.model.repository.CarRepository;
-import com.gramadsky.model.repository.CarStatusRepository;
-import com.gramadsky.model.repository.OrderRepository;
+import com.gramadsky.model.repository.*;
 import com.gramadsky.security.services.RegistrationService;
 import com.gramadsky.service.CarService;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 @Log4j2
@@ -29,6 +29,7 @@ public class CarServiceImpl implements CarService {
     private final CarStatusRepository carStatusRepository;
     private final RegistrationService registrationService;
     private final DiscountServiceImpl discountService;
+    private final CarClassServiceImpl carClassService;
 
     @Override
     public List<Car> findAll() {
@@ -53,21 +54,37 @@ public class CarServiceImpl implements CarService {
     public String carList(Model model) {
         User user = registrationService.findRegisteredUser();
         CarStatus carStatus = carStatusService.findById(3);
-        model.addAttribute("cars", carRepository.findAllByCarStatusNotLike(carStatus));
+        List<Car> cars = carRepository.findAllByCarStatusNotLike(carStatus);
+
+        model.addAttribute("cars", cars);
         model.addAttribute("name", user.getName());
-        log.info(user.getName() + " " + user.getSurname() + " is logged in at " + LocalDateTime.now());
+        log.info(user.getName() + " " + user.getSurname() + " (" + user.getLogin().getRole() + ") " + "is logged");
         if (registrationService.findLoginRole() == Login.Role.ROLE_ADMIN) {
             return "redirect:/admin/orders";
         }
         return "user/car-list";
     }
 
-    public void detailingInformation(Integer id, Model model) {
+    public String detailingInformation(Integer id, Model model) {
         Car car = findById(id);
         model.addAttribute("car", car);
 
         List<Integer> prices = discountService.getCarPricesPerDay(car);
         model.addAttribute("prices", prices);
+
+        List<Order> carOrders = orderRepository.findByCarIdAndStatusNotLike(car.getId(), Order.Status.DENIED);
+        model.addAttribute("carOrders", carOrders);
+
+        User user = registrationService.findRegisteredUser();
+
+        if (user.getStatus() == User.Status.INVOICE_NOT_PAID
+                || user.getStatus() == User.Status.REPAIR_NOT_PAID) {
+            model.addAttribute("errorMessage",
+                    "You have unpaid bills! Please pay first.");
+        }
+
+        model.addAttribute("user", user);
+        return "user/detailedInformationCar";
     }
 
     @Override
@@ -102,11 +119,19 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void saveNewCar(String nameClass, String status,
-                           Car.Transmission transmission, Car car) {
+                           Car.Transmission transmission, MultipartFile file, Car car) throws IOException {
         car.setTransmission(transmission);
         car.setCarClass(carClassRepository.findByNameClass(nameClass));
         car.setCarStatus(carStatusRepository.findByCarStatus(status));
+
+        if (file.getSize() != 0) {
+            var base64EncodedImage = Base64.getMimeEncoder().encodeToString(file.getBytes());
+            car.setImageCar(base64EncodedImage);
+        }
+
         carRepository.save(car);
+        log.info("The new car are saved: " + car);
+
     }
 
     @Override
@@ -115,8 +140,57 @@ public class CarServiceImpl implements CarService {
         return this.carRepository.findAll(pageable);
     }
 
-    public void sortCar(String nameClass, Model model) {
+    public void sortCarByNameClass(String nameClass, Model model) {
         List<Car> cars = carRepository.findByCarClassNameClass(nameClass);
         model.addAttribute("cars", cars);
+    }
+
+    public void findPaginatedCars(int pageNo, Model model) {
+        int pageSize = 15;
+
+        Page<Car> page = findPaginated(pageNo, pageSize);
+        List<Car> listCars = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listCars", listCars);
+    }
+
+    public void chooseCar(Integer id, Model model) {
+        List<CarStatus> carStatuses = carStatusService.findAll();
+        model.addAttribute("carStatuses", carStatuses);
+        Car car = findById(id);
+        model.addAttribute("car", car);
+        model.addAttribute("orders", car.getOrders());
+    }
+
+    public void updateCar(Integer id, Float fuelConsumption, Float engineVolume,
+                          Float cost, String status, Integer totalCost, MultipartFile file) throws IOException {
+
+        Car car = findById(id);
+        car.setTotalCostCar(totalCost);
+        car.setFuelConsumption(fuelConsumption);
+        car.setEngineVolume(engineVolume);
+        car.setCost(cost);
+        CarStatus carStatus = carStatusRepository.findByCarStatus(status);
+        car.setCarStatus(carStatus);
+
+        if (file.getSize() != 0) {
+            var base64EncodedImage = Base64.getMimeEncoder().encodeToString(file.getBytes());
+            car.setImageCar(base64EncodedImage);
+        }
+        carRepository.save(car);
+        log.info(car.getId() + ". " + car.getCarModel() + " has been updated");
+
+    }
+
+    public void newCar(Model model) {
+        List<CarClass> carClasses = carClassService.findAll();
+        model.addAttribute("carClasses", carClasses);
+        List<CarStatus> carStatuses = carStatusService.findAll();
+        model.addAttribute("carStatuses", carStatuses);
+        List<Car.Transmission> transmissions = Arrays.asList(Car.Transmission.values());
+        model.addAttribute("transmissions", transmissions);
     }
 }

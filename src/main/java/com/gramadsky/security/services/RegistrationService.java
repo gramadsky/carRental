@@ -25,9 +25,6 @@ public class RegistrationService {
     public String register(Login login, User user, String password, String confirmPassword, Model model) {
         if (!password.equals(confirmPassword)) {
             model.addAttribute("errorMessage", "Passwords do not match");
-            model.addAttribute("user", new User());
-            model.addAttribute("login", new Login());
-
             return "/auth/registration";
         }
 

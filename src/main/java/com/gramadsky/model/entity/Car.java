@@ -23,6 +23,9 @@ public class Car {
     @Column(name = "totalcostcar")
     private Integer totalCostCar;
 
+    @Column(name="year")
+    private String year;
+
     @Column(name = "fuelconsumption")
     private Float fuelConsumption;
 
@@ -39,6 +42,9 @@ public class Car {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "carstatus")
     private CarStatus carStatus;
+
+    @Column(name="imagecar")
+    private String imageCar;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();

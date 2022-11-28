@@ -1,9 +1,6 @@
 package com.gramadsky.service.impl;
 
-import com.gramadsky.model.entity.Car;
-import com.gramadsky.model.entity.Discount;
-import com.gramadsky.model.entity.Order;
-import com.gramadsky.model.entity.User;
+import com.gramadsky.model.entity.*;
 import com.gramadsky.model.repository.OrderRepository;
 import com.gramadsky.security.services.RegistrationService;
 import com.gramadsky.service.OrderService;
@@ -19,7 +16,6 @@ import org.springframework.ui.Model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Log4j2
@@ -31,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserServiceImpl userService;
     private final CarServiceImpl carService;
     private final RegistrationService registrationService;
+    private final DegreeOfDamageServiceImpl degreeOfDamageService;
 
     @Override
     public List<Order> findAll() {
@@ -83,7 +80,10 @@ public class OrderServiceImpl implements OrderService {
     public String creteNewOrder(Integer id, Order order, Model model, String passportData) {
         Car car = carService.findById(id);
         User user = registrationService.findRegisteredUser();
-        List<Order> carOrders = car.getOrders();
+        List<Order> carOrders = repository.findByCarIdAndStatusNotLike(car.getId(), Order.Status.DENIED);
+
+        List<Integer> prices = discountService.getCarPricesPerDay(car);
+        model.addAttribute("prices", prices);
 
         model.addAttribute("carOrders", carOrders);
         model.addAttribute("user", user);
@@ -94,33 +94,33 @@ public class OrderServiceImpl implements OrderService {
                 model.addAttribute("errorMessage1",
                         "" +
                                 "Passport details must not be empty!");
-                return "user/chooseCar";
+                return "user/detailedInformationCar";
             } else {
                 user.setPassportData(passportData);
             }
         }
 
         if (order.getStartOfRental() == null) {
-            model.addAttribute("errorMessage2","Invalid start date of rental!");
-            return "user/chooseCar";
+            model.addAttribute("errorMessage2", "Invalid start date of rental!");
+            return "user/detailedInformationCar";
         }
 
         if (order.getStartOfRental().toEpochDay() < LocalDate.now().toEpochDay()) {
             model.addAttribute("errorMessage3",
                     "Invalid start date of rental! The rental start date cannot be earlier than the current date.");
-            return "user/chooseCar";
+            return "user/detailedInformationCar";
         }
 
         if (order.getEndOfRental() == null) {
             model.addAttribute("errorMessage4",
                     "Invalid end date of rental!");
-            return "user/chooseCar";
+            return "user/detailedInformationCar";
         }
 
         if (order.getStartOfRental().toEpochDay() >= order.getEndOfRental().toEpochDay()) {
             model.addAttribute("errorMessage5",
                     "Invalid end date of rental! The end date of the rental cannot be earlier than the start date of the rental.");
-            return "user/chooseCar";
+            return "user/detailedInformationCar";
         }
 
         for (int i = 0; i < carOrders.size(); i++) {
@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
                     order.getStartOfRental().toEpochDay() <= carOrders.get(i).getEndOfRental().toEpochDay()) {
                 model.addAttribute("errorMessage6",
                         "At this time the car is not available!");
-                return "user/chooseCar";
+                return "user/detailedInformationCar";
             }
         }
         userService.updateUser(user);
@@ -170,6 +170,13 @@ public class OrderServiceImpl implements OrderService {
         return "user/orders";
     }
 
+    public void changeOrderStatusToCarReturn(Integer id) {
+        Order order = findById(id);
+        order.setStatus(Order.Status.CAR_RETURN);
+        save(order);
+        log.info(order + " status has been updated");
+    }
+
     public String selectUnpaidOrder(Integer id, Model model) {
         model.addAttribute("order", findById(id));
         return "user/payOrder";
@@ -198,6 +205,67 @@ public class OrderServiceImpl implements OrderService {
                 "order status " + order + " has been updated ");
 
         return "redirect:/orders";
+    }
+
+    public void findPaginatedOrders(int pageNo, Model model) {
+        int pageSize = 8;
+
+        Page<Order> page = findPaginated(pageNo, pageSize);
+        List<Order> listOrders = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listOrders", listOrders);
+    }
+
+    public void pending(String name, Integer id) {
+        Order order = findById(id);
+        if (name.equals("confirmed")) {
+            order.setStatus(Order.Status.CONFIRMED);
+        } else
+            order.setStatus(Order.Status.DENIED);
+        carService.updateAvailabilityCar(order.getCar(), 1);
+        save(order);
+        log.info("Status was changed in " + order);
+    }
+
+    public void calculateRepair(Integer id, Model model) {
+        Order order = findById(id);
+        List<DegreeOfDamage> damages = degreeOfDamageService.findAll();
+        model.addAttribute("car", order.getCar());
+        model.addAttribute("damages", damages);
+        model.addAttribute("order", order);
+    }
+
+    public void saveCalculateRepair(Integer id, Integer damage) {
+        Order order = findById(id);
+        Integer totalCost = order.getCar().getTotalCostCar();
+        Integer damageCar = totalCost * damage / 100;
+        order.setStatus(Order.Status.WAITING_FOR_PAYMENTS_FOR_REPAIR);
+        order.setRepairBill(damageCar);
+        save(order);
+        log.info(order.getCar().getId() + ". " + order.getCar().getCarModel() +
+                " was damaged.The repair bill was " + order.getRepairBill() + "$");
+    }
+
+    public String checkedCar(String name, Integer id) {
+        Order order = findById(id);
+        if (name.equals("completed")) {
+            order.setStatus(Order.Status.COMPLETED);
+            save(order);
+            log.info(order + " status has been changed");
+        } else {
+            order.setStatus(Order.Status.CAR_DAMAGED);
+            carService.updateAvailabilityCar(order.getCar(), 3);
+            save(order);
+            User user = order.getUser();
+            user.setStatus(User.Status.REPAIR_NOT_PAID);
+            userService.updateUser(user);
+            log.info(order + " status has been changed. " + user + " status has been changed");
+            return "redirect:/admin/calculateRepair/{id}";
+        }
+        return "redirect:/admin/orders";
     }
 }
 

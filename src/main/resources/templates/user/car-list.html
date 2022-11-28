@@ -78,14 +78,17 @@
 <div class="container w">
     <div class="row centered">
         <br/><br/>
-        <div class="col-lg-3" th:each="car : ${cars}">
+        <div class="col-lg-4" th:each="car : ${cars}" >
             <h4>
                 <a th:text="${car.carModel}" th:href="@{/detailedInformation/{id}(id=${car.id})}"></a>
             </h4>
             <big>Class </big><big th:text="${#strings.toUpperCase(car.carClass)}"></big><br/>
             <big>transmission </big><big th:text="${car.transmission}"></big><br/>
             <big th:text="${car.cost}"></big><big>$ per/ day </big><br/>
-            <br/><br/>
+<!--            <img th:src="/images/${car.image.id}" height="60px">-->
+            <img th:src="@{'data:image/jpeg;base64,'+${car.imageCar}}" height="160px"/>
+
+            <br/><br/> <br/><br/> <br/><br/>
         </div>
     </div>
     <br/><br/>

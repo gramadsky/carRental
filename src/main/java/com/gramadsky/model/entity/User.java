@@ -2,6 +2,7 @@ package com.gramadsky.model.entity;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class User {
     @NotEmpty(message = "User's email cannot be empty.")
     @Column(name = "email")
     private String email;
-    @Column(name="passportdata")
+    @Column(name = "passportdata")
     private String passportData;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -36,13 +37,13 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Login login;
 
-    @OneToMany(mappedBy="user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orderList = new ArrayList<>();
 
     public User() {
     }
 
-    public  enum Status {
+    public enum Status {
         NO_DEBTS("NO DEBTS"),
         INVOICE_NOT_PAID("INVOICE NOT PAID"),
         REPAIR_NOT_PAID("REPAIR NOT PAID");
@@ -61,7 +62,7 @@ public class User {
     @Override
     public String toString() {
         return id + ". " + name + ", " + surname +
-                 dateOfBirth + ", " + email;
+                dateOfBirth + ", " + email;
     }
 }
 

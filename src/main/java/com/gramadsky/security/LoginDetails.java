@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+//класс-обёртка состандартными методами
 public class LoginDetails implements UserDetails {
     private final Login login;
 
