@@ -1,5 +1,6 @@
 package com.gramadsky.controller;
 
+import com.gramadsky.constants.PageConst;
 import com.gramadsky.model.entity.Car;
 import com.gramadsky.model.entity.Login;
 import com.gramadsky.service.LoginService;
@@ -31,7 +32,7 @@ public class AdminController {
     public String findPaginatedOrders(@PathVariable(value = "pageNo") int pageNo, Model model) {
         orderService.findPaginatedOrders(pageNo, model);
 
-        return "admin/order-list";
+        return PageConst.ADMIN_ORDERS;
     }
 
     @GetMapping("/orders")
@@ -44,7 +45,7 @@ public class AdminController {
                           @PathVariable("id") Integer id) {
         orderService.pending(name, id);
 
-        return "redirect:/admin/orders";
+        return PageConst.REDIRECT_ADMIN_ORDERS;
     }
 
     @GetMapping("/users")
@@ -52,7 +53,7 @@ public class AdminController {
         List<Login> logins = loginService.findAll();
         model.addAttribute("logins", logins);
 
-        return "admin/user-list";
+        return PageConst.ADMIN_USERS;
     }
 
     @PostMapping("/blocking/{id}")
@@ -60,14 +61,14 @@ public class AdminController {
                            @PathVariable("id") Integer id) {
         userService.blocking(name, id);
 
-        return "redirect:/admin/users";
+        return PageConst.REDIRECT_ADMIN_USERS;
     }
 
     @GetMapping("cars/{pageNo}")
     public String cars(@PathVariable(value = "pageNo") int pageNo, Model model) {
         carService.findPaginatedCars(pageNo, model);
 
-        return "admin/car-list";
+        return PageConst.ADMIN_CARS;
     }
 
     @GetMapping("/cars")
@@ -80,7 +81,7 @@ public class AdminController {
                             Model model) {
         carService.chooseCar(id, model);
 
-        return "admin/selectCar";
+        return PageConst.ADMIN_SELECT_CAR;
     }
 
     @PostMapping("/updateCar/{id}")
@@ -93,7 +94,7 @@ public class AdminController {
                             @RequestParam("file") MultipartFile file) throws IOException {
         carService.updateCar(id, fuelConsumption, engineVolume, cost, status, totalCost, file);
 
-        return "redirect:/admin/selectCar/{id}";
+        return PageConst.REDIRECT_ADMIN_SELECT_CAR_ID;
     }
 
     @GetMapping("/newCar")
@@ -101,7 +102,7 @@ public class AdminController {
                          Model model) {
         carService.newCar(model);
 
-        return "admin/newCar";
+        return PageConst.ADMIN_NEW_CAR;
     }
 
     @PostMapping("/saveNewCar")
@@ -112,7 +113,7 @@ public class AdminController {
                              Car car) throws IOException {
         carService.saveNewCar(nameClass, status, transmission, file, car);
 
-        return "redirect:/admin/cars";
+        return PageConst.REDIRECT_ADMIN_CARS;
     }
 
     @PostMapping("/checkedCar/{id}")
@@ -126,7 +127,8 @@ public class AdminController {
     public String calculateRepair(@PathVariable("id") Integer id,
                                   Model model) {
         orderService.calculateRepair(id, model);
-        return "admin/calculateRepair";
+
+        return PageConst.ADMIN_CALCULATE_REPAIR;
     }
 
     @PostMapping("/calculateRepair/{id}")
@@ -134,6 +136,6 @@ public class AdminController {
                             @RequestParam("damage") Integer damage) {
         orderService.saveCalculateRepair(id, damage);
 
-        return "redirect:/admin/orders";
+        return PageConst.REDIRECT_ADMIN_ORDERS;
     }
 }

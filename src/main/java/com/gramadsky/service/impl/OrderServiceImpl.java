@@ -1,5 +1,6 @@
 package com.gramadsky.service.impl;
 
+import com.gramadsky.constants.PageConst;
 import com.gramadsky.model.entity.*;
 import com.gramadsky.model.repository.OrderRepository;
 import com.gramadsky.security.services.RegistrationService;
@@ -82,14 +83,14 @@ public class OrderServiceImpl implements OrderService {
         if (user.getStatus() == User.Status.BLOCKED) {
             model.addAttribute("error",
                     "Your account has been blocked. Contact Support.");
-            return "user/detailedInformationCar";
+            return PageConst.USER_DETAILED_INFORMATION_CAR;
         }
 
         if (user.getStatus() == User.Status.INVOICE_NOT_PAID
                 || user.getStatus() == User.Status.REPAIR_NOT_PAID) {
             model.addAttribute("errorMessage",
                     "You have unpaid bills! Please pay first.");
-            return "user/detailedInformationCar";
+            return PageConst.USER_DETAILED_INFORMATION_CAR;
         }
 
         if (user.getPassportData() == null) {
@@ -97,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
                 model.addAttribute("errorMessage1",
                         "" +
                                 "Passport details must not be empty!");
-                return "user/detailedInformationCar";
+                return PageConst.USER_DETAILED_INFORMATION_CAR;
             } else {
                 user.setPassportData(passportData);
             }
@@ -105,27 +106,27 @@ public class OrderServiceImpl implements OrderService {
 
         if (order.getStartOfRental() == null) {
             model.addAttribute("errorMessage2", "Invalid start date of rental!");
-            return "user/detailedInformationCar";
+            return PageConst.USER_DETAILED_INFORMATION_CAR;
         }
 
         if (order.getStartOfRental().toEpochDay() < LocalDate.now().toEpochDay()) {
             model.addAttribute("errorMessage3",
                     "Invalid start date of rental!" +
                             " The rental start date cannot be earlier than the current date.");
-            return "user/detailedInformationCar";
+            return PageConst.USER_DETAILED_INFORMATION_CAR;
         }
 
         if (order.getEndOfRental() == null) {
             model.addAttribute("errorMessage4",
                     "Invalid end date of rental!");
-            return "user/detailedInformationCar";
+            return PageConst.USER_DETAILED_INFORMATION_CAR;
         }
 
         if (order.getStartOfRental().toEpochDay() >= order.getEndOfRental().toEpochDay()) {
             model.addAttribute("errorMessage5",
                     "Invalid end date of rental! " +
                             "The end date of the rental cannot be earlier than the start date of the rental.");
-            return "user/detailedInformationCar";
+            return PageConst.USER_DETAILED_INFORMATION_CAR;
         }
 
         for (int i = 0; i < carOrders.size(); i++) {
@@ -133,7 +134,7 @@ public class OrderServiceImpl implements OrderService {
                     order.getStartOfRental().toEpochDay() <= carOrders.get(i).getEndOfRental().toEpochDay()) {
                 model.addAttribute("errorMessage6",
                         "At this time the car is not available!");
-                return "user/detailedInformationCar";
+                return PageConst.USER_DETAILED_INFORMATION_CAR;
             }
         }
         userService.updateUser(user);
@@ -142,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
         saveNewOrder(car, user, order);
         log.info("New " + order + " has been created");
 
-        return "user/payOrder";
+        return PageConst.USER_PAY_ORDER;
     }
 
     public void saveNewOrder(Car car, User user, Order order) {
@@ -164,15 +165,15 @@ public class OrderServiceImpl implements OrderService {
             save(order);
             log.info(order + " has been updated ");
         }
-        return "redirect:/orders";
+        return PageConst.REDIRECT_ORDERS;
     }
 
     public String myOrdersList(Model model) {
         User user = registrationService.findRegisteredUser();
         List<Order> orders = repository.findByUserOrderByIdDesc(user);
-
         model.addAttribute("orders", orders);
-        return "user/orders";
+
+        return PageConst.USER_ORDERS;
     }
 
     public void changeOrderStatusToCarReturn(Integer id) {
@@ -184,7 +185,7 @@ public class OrderServiceImpl implements OrderService {
 
     public String selectUnpaidOrder(Integer id, Model model) {
         model.addAttribute("order", findById(id));
-        return "user/payOrder";
+        return PageConst.USER_PAY_ORDER;
     }
 
     public String payOrder(Integer id, String name) {
@@ -197,7 +198,7 @@ public class OrderServiceImpl implements OrderService {
             save(order);
             log.info(order + " has been updated");
         }
-        return "redirect:/orders";
+        return PageConst.REDIRECT_ORDERS;
     }
 
     public String payRepair(Integer id) {
@@ -210,7 +211,7 @@ public class OrderServiceImpl implements OrderService {
                 "Status has been updated to a " + user.getStatus() + "\n" +
                 "order status " + order + " has been updated ");
 
-        return "redirect:/orders";
+        return PageConst.REDIRECT_ORDERS;
     }
 
     public void findPaginatedOrders(int pageNo, Model model) {
@@ -271,7 +272,7 @@ public class OrderServiceImpl implements OrderService {
             log.info(order + " status has been changed. " + user + " status has been changed");
             return "redirect:/admin/calculateRepair/{id}";
         }
-        return "redirect:/admin/orders";
+        return PageConst.REDIRECT_ADMIN_ORDERS;
     }
 
     public void checkedOrder(Model model) {

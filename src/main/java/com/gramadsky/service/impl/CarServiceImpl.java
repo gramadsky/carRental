@@ -1,5 +1,6 @@
 package com.gramadsky.service.impl;
 
+import com.gramadsky.constants.PageConst;
 import com.gramadsky.model.entity.*;
 import com.gramadsky.model.repository.*;
 import com.gramadsky.security.services.RegistrationService;
@@ -58,11 +59,10 @@ public class CarServiceImpl implements CarService {
 
         model.addAttribute("cars", cars);
         model.addAttribute("name", user.getName());
-        log.info(user.getName() + " " + user.getSurname() + " (" + user.getLogin().getRole() + ") " + "is logged");
         if (registrationService.findLoginRole() == Login.Role.ROLE_ADMIN) {
-            return "redirect:/admin/orders";
+            return PageConst.REDIRECT_ADMIN_ORDERS;
         }
-        return "user/car-list";
+        return PageConst.USER_CARS;
     }
 
     public String detailingInformation(Integer id, Model model) {
@@ -88,7 +88,7 @@ public class CarServiceImpl implements CarService {
                     "Your account has been blocked. Contact Support.");
         }
 
-        return "user/detailedInformationCar";
+        return PageConst.USER_DETAILED_INFORMATION_CAR;
     }
 
     @Override
@@ -107,10 +107,10 @@ public class CarServiceImpl implements CarService {
                     "You have unpaid bills! Please pay first.");
             List<Integer> prices = discountService.getCarPricesPerDay(car);
             model.addAttribute("prices", prices);
-            return "user/detailedInformationCar";
+            return PageConst.USER_DETAILED_INFORMATION_CAR;
         }
         model.addAttribute("user", user);
-        return "user/chooseCar";
+        return PageConst.USER_CHOOSE_CAR;
     }
 
     public void updateAvailabilityCar(Car car, Integer id) {

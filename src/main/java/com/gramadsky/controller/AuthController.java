@@ -1,5 +1,6 @@
 package com.gramadsky.controller;
 
+import com.gramadsky.constants.PageConst;
 import com.gramadsky.model.entity.Login;
 import com.gramadsky.model.entity.User;
 import com.gramadsky.security.services.RegistrationService;
@@ -24,13 +25,13 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "auth/login";
+        return PageConst.AUTH_LOGIN;
     }
 
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("login") Login login,
                                    @ModelAttribute("user") User user) {
-        return "auth/registration";
+        return PageConst.AUTH_REGISTRATION;
     }
 
     @PostMapping("/registration")
@@ -42,7 +43,7 @@ public class AuthController {
         loginValidator.validate(login, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", "This username is already taken");
-            return "/auth/registration";
+            return PageConst.AUTH_REGISTRATION;
         }
         return registrationService.register(login, user, password, confirmPassword, model);
     }
