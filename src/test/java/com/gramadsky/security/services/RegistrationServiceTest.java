@@ -18,20 +18,17 @@ import org.springframework.ui.Model;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class RegistrationServiceTest {
-
     @Autowired
     private RegistrationService registrationService;
-
     @MockBean
     private PeopleRepository peopleRepository;
-
     @MockBean
     private UsersRepository usersRepository;
 
     Model model;
 
     @Test
-    void register() {
+    void registerTest() {
         User user = new User();
         Login login = new Login();
         String password = "12";
@@ -43,6 +40,6 @@ class RegistrationServiceTest {
         Assert.assertTrue(CoreMatchers.is(user.getStatus()).matches(User.Status.NO_DEBTS));
 
         //проверка что userRepository был вызван один раз, и вызов происходил по методу save()
-        Mockito.verify(usersRepository,Mockito.timeout(1)).save(user);
+        Mockito.verify(usersRepository, Mockito.timeout(1)).save(user);
     }
 }

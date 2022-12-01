@@ -29,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void deleteOrder(Integer id) {
-        loginRepository.deleteById(id);
+    public void delete(Login login) {
+        loginRepository.delete(login);
     }
 }

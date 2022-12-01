@@ -11,6 +11,5 @@ public interface LoginService {
 
     void save(Login login);
 
-    void deleteOrder(Integer id);
-
+    void delete(Login login);
 }

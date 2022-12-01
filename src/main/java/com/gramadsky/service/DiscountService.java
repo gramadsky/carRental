@@ -1,6 +1,5 @@
 package com.gramadsky.service;
 
-
 import com.gramadsky.model.entity.Discount;
 
 import java.util.List;

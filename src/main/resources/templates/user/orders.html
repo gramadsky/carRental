@@ -12,7 +12,6 @@
             crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -85,6 +84,11 @@
                             <button type="submit" th:name="action" class="btn btn-warning">Pay for repairs</button>
                         </form>
                     </div>
+                    <div th:if="${order.status.displayName == 'EXPIRED'}">
+                        <form th:method="POST" th:action="@{/expiredOrder/{id}(id=${order.id})}">
+                            <button type="submit" th:name="action" class="btn btn-danger">Return car</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -102,9 +106,6 @@
             <p>Friendly 24/7 customer service</p>
             <p><br/><br/></p>
         </div>
-        <div class="col-lg-2"></div>
-        <div class="col-lg-10 col-lg-offset-1"></div>
-        <img src="img/dsfds" alt="" class="img-responsive">
     </div>
 </div>
 

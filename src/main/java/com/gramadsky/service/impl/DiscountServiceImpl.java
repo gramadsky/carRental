@@ -25,7 +25,7 @@ public class DiscountServiceImpl implements DiscountService {
         return repository.findAll();
     }
 
-    public List <Integer> getCarPricesPerDay(Car car){
+    public List<Integer> getCarPricesPerDay(Car car) {
 
         List<Discount> discounts = findAll();
         Integer oneThree = (int) car.getCost();

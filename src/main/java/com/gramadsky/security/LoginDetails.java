@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-//класс-обёртка состандартными методами
+//класс-обёртка со стандартными методами
 public class LoginDetails implements UserDetails {
     private final Login login;
 
@@ -52,7 +52,6 @@ public class LoginDetails implements UserDetails {
         return true;
     }
 
-    // Нужно, чтобы получать данные аутентифицированного пользователя
     public Login getLogin() {
         return this.login;
     }

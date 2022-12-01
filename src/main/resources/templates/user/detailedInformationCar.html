@@ -7,13 +7,9 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-
 </head>
 <body>
-
 
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -53,41 +49,80 @@
             <img th:src="@{'data:image/jpeg;base64,'+${car.imageCar}}" height="300px"/>
         </div>
         <div class="col-lg-6">
-            <form th:action="@{/chooseCar/{id}(id=${car.id})}">
-                Class:
-                <strong th:text="${car.carClass}">value</strong><br/><br/>
-                Fuel consumption :
-                <strong th:text="${car.fuelConsumption}">value</strong><br/><br/>
-                Engine volume:
-                <strong th:text="${car.engineVolume}">value</strong><br/><br/>
-                Transmission:
-                <strong th:text="${car.transmission}">value</strong><br/><br/>
+            Class:
+            <strong th:text="${car.carClass}">value</strong><br/><br/>
+            Fuel consumption :
+            <strong th:text="${car.fuelConsumption}">value</strong><br/><br/>
+            Engine volume:
+            <strong th:text="${car.engineVolume}">value</strong><br/><br/>
+            Transmission:
+            <strong th:text="${car.transmission}">value</strong><br/><br/>
 
-
-                <input type="submit" class="btn btn-primary" value="Order a car"/><br/><br/>
-                <span style="color: red" th:if="${errorMessage}" th:text="${errorMessage}">Error</span>
-            </form>
+            <h4>Price per day</h4></br>
+            <div>
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                    <tr>
+                        <td>1-3 days</td>
+                        <td>
+                            <span th:text="${prices.get(0)}"></span>
+                            <span>  USD/day</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4-7 days</td>
+                        <td>
+                            <span th:text="${prices.get(1)}"></span>
+                            <span>  USD/day</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>8-14 days</td>
+                        <td>
+                            <span th:text="${prices.get(2)}"></span>
+                            <span>USD/day</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15-30 days</td>
+                        <td>
+                            <span th:text="${prices.get(3)}"></span>
+                            <span>  USD/day</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>from 30 days</td>
+                        <td>
+                            <span th:text="${prices.get(4)}"></span>
+                            <span>  USD/day</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="container wb">
     <div class="row centered">
-        <button class="btn btn-info" data-toggle="modal" data-target="#myModal">Button</button>
+        <button class="btn btn-info" data-toggle="modal" data-target="#myModal">Order a car</button>
         <div id="myModal" class="modal fade" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button class="close" data-dismiss="modal">x</button>
+                        <button style="color: red" class="close" data-dismiss="modal">x</button>
                         <h4 class="modal-title">Order car</h4>
                     </div>
+                    <h5 style="color: red" th:if="${error}" th:text="${error}">Error</h5>
                     <div class="modal-body">
-
                         <div class="container wb">
                             <div class="col-lg-4">
                                 <form role="form" th:method="POST" th:action="@{/chooseCar/{id}(id=${order.id})}">
                                     <div class="form-group">
-                                        <h3 th:text="${car.carModel}">value</h3></br>
+                                           <span style="color: red" th:if="${errorMessage}"
+                                                 th:text="${errorMessage}">Error</span>
+                                        <h2 th:text="${car.carModel}">value</h2></br>
                                         Car class:
                                         <strong th:text="${car.carClass}">value</strong><br/><br/>
                                         Car cost:
@@ -98,32 +133,30 @@
                                         <strong th:if="${user.passportData != null}" th:text="${user.passportData}">value</strong><br/>
                                         <input th:if="${user.passportData == null}" type="text"
                                                th:name="passportData"
-                                               th:field="${user.passportData}"/>
+                                               th:field="${user.passportData}"/></br>
                                         <span style="color: red" th:if="${errorMessage1}"
-                                              th:text="${errorMessage1}" th:onload="showToast()">Error</span>
+                                              th:text="${errorMessage1}">Error</span>
                                         <br/>
-
                                         <label>Enter the rental start date: </label><br/>
                                         <input type="date" th:field="${order.startOfRental}"/><br/>
                                         <span style="color: red" th:if="${errorMessage2}"
-                                              th:text="${errorMessage2}" th:onload="showToast()">Error</span>
+                                              th:text="${errorMessage2}">Error</span>
                                         <span style="color: red" th:if="${errorMessage3}"
-                                              th:text="${errorMessage3}" th:onload="showToast()">Error</span>
+                                              th:text="${errorMessage3}">Error</span>
                                         <br/>
                                         <label>Enter the rental end date: </label><br/>
                                         <input type="date" th:field="${order.endOfRental}"/><br/>
                                         <span style="color: red" th:if="${errorMessage4}"
-                                              th:text="${errorMessage4}"th:onload="showToast()" >Error</span>
+                                              th:text="${errorMessage4}">Error</span>
                                         <span style="color: red" th:if="${errorMessage5}"
-                                              th:text="${errorMessage5}" th:onload="showToast()">Error</span>
+                                              th:text="${errorMessage5}">Error</span>
                                         <span style="color: red" th:if="${errorMessage6}"
-                                              th:text="${errorMessage6}" th:onload="showToast()">Error</span>
+                                              th:text="${errorMessage6}">Error</span>
                                         <br/>
                                         <input type="submit" class="btn btn-success" value="Save Order"/>
                                     </div>
                                 </form>
                             </div>
-
 
                             <div class="col-lg-4">
                                 <div th:if="${!carOrders.empty}"><h3>All orders this car: </h3>
@@ -146,66 +179,14 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger"> Order</button>
-                </div>
-
             </div>
-
         </div>
     </div>
 </div>
 </div>
 
-<div class="container wb">
-    <div class="row centered">
-        <h3>Price per day</h3></br>
-        <div>
-            <table class="table table-bordered table-hover">
-                <tbody>
-                <tr>
-                    <td>1-3 days</td>
-                    <td>
-                        <span th:text="${prices.get(0)}"></span>
-                        <span>  USD/day</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4-7 days</td>
-                    <td>
-                        <span th:text="${prices.get(1)}"></span>
-                        <span>  USD/day</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>8-14 days</td>
-                    <td>
-                        <span th:text="${prices.get(2)}"></span>
-                        <span>USD/day</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>15-30 days</td>
-                    <td>
-                        <span th:text="${prices.get(3)}"></span>
-                        <span>  USD/day</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>from 30 days</td>
-                    <td>
-                        <span th:text="${prices.get(4)}"></span>
-                        <span>  USD/day</span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
 <div class="container wb">
     <div class="row centered">
         <br/><br/>
@@ -239,9 +220,9 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 
-<script >
-
+<script>
     $('#myModal').modal("toggle");
+
 
 </script>
 

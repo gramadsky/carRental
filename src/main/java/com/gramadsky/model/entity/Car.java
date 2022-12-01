@@ -23,7 +23,7 @@ public class Car {
     @Column(name = "totalcostcar")
     private Integer totalCostCar;
 
-    @Column(name="year")
+    @Column(name = "year")
     private String year;
 
     @Column(name = "fuelconsumption")
@@ -43,7 +43,7 @@ public class Car {
     @JoinColumn(name = "carstatus")
     private CarStatus carStatus;
 
-    @Column(name="imagecar")
+    @Column(name = "imagecar")
     private String imageCar;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
@@ -55,7 +55,7 @@ public class Car {
                 ", cost =" + cost + ", " + carStatus;
     }
 
-    public  enum Transmission {
+    public enum Transmission {
         AT("automatic transmission"),
         MT("mechanical transmission");
 

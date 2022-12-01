@@ -12,10 +12,7 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
 
-
-
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-
 </head>
 <body>
 
@@ -34,7 +31,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="container wb">
     <div class="row centered">
@@ -73,7 +69,7 @@
                 <div class="form-group">
                     <label for="sel1">Car condition:</label>
                     <strong th:text="${car.carStatus}">value</strong>
-                    <select id="sel1" th:name="status">
+                    <select id="sel1" th:name="status" class="form-control">
                         <option th:each="status : ${carStatuses}"
                                 th:value="${status}"
                                 th:text="${status}"
@@ -82,25 +78,7 @@
                     </select>
                 </div>
                 <br/>
-                <!--            <div class="row centered">-->
-                <!--                <label class="btn btn-primary">-->
-                <!--                    <span class="glyphicon glyphicon-upload"></span>-->
-                <!--                    <span>Upload picture</span>-->
-                <!--                    <input type="file" th:name="file" class="hidden">-->
-                <!--                </label>-->
-                <!--            </div>-->
                 <br/>
-                <!--            <div>-->
-                <!--                <div class="input-group-btn">-->
-                <!--                    <label for="files" class="btn btn-default">browse</label>-->
-                <!--                    <input id="files" type="file" th:name="file" class="btn btn-default"  style="visibility:hidden;"/>-->
-                <!--                </div>-->
-                <!--            </div>-->
-
-                <br/>
-
-                <br/>
-
             </div>
             <input type="submit" class="btn btn-primary btn-md btn-block" value="Update car"/>
         </form>
@@ -142,19 +120,10 @@
     <div class="row centered">
         <br/><br/>
         <div class="col-lg-8 col-lg-offset-2">
-            <h4></h4>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p><br/><br/></p>
+            <br/><br/>
         </div>
     </div>
 </div>
-<div id="f">
-    <div class="container">
-        <div class="row centered">
-        </div>
-    </div>
-</div>
+
 </body>
 </html>

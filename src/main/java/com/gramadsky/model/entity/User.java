@@ -43,10 +43,20 @@ public class User {
     public User() {
     }
 
+    public User(String name, String surname, LocalDate dateOfBirth, String email, String passportData, Status status) {
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.passportData = passportData;
+        this.status = status;
+    }
+
     public enum Status {
         NO_DEBTS("NO DEBTS"),
         INVOICE_NOT_PAID("INVOICE NOT PAID"),
-        REPAIR_NOT_PAID("REPAIR NOT PAID");
+        REPAIR_NOT_PAID("REPAIR NOT PAID"),
+        BLOCKED("BLOCKED");
 
         private final String displayName;
 

@@ -16,8 +16,16 @@ public class CarStatus {
     @Column(name = "carstatus")
     private String carStatus;
 
-    @OneToMany(mappedBy="carStatus",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "carStatus", cascade = CascadeType.ALL)
     private List<Car> cars = new ArrayList<>();
+
+    public CarStatus(Integer id, String carStatus) {
+        this.id = id;
+        this.carStatus = carStatus;
+    }
+
+    public CarStatus() {
+    }
 
     @Override
     public String toString() {

@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import java.util.List;
 
 @Log4j2
@@ -33,15 +32,6 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> findAll() {
         return repository.findAll();
     }
-
-    public List<Order> findAllDesc() {
-        return repository.findAllByOrderByIdDesc();
-    }
-
-    public Page pageable(Pageable pageable) {
-        return repository.findAll(pageable);
-    }
-
 
     @Override
     public Order findById(Integer id) {
@@ -89,6 +79,19 @@ public class OrderServiceImpl implements OrderService {
         model.addAttribute("user", user);
         model.addAttribute("car", car);
 
+        if (user.getStatus() == User.Status.BLOCKED) {
+            model.addAttribute("error",
+                    "Your account has been blocked. Contact Support.");
+            return "user/detailedInformationCar";
+        }
+
+        if (user.getStatus() == User.Status.INVOICE_NOT_PAID
+                || user.getStatus() == User.Status.REPAIR_NOT_PAID) {
+            model.addAttribute("errorMessage",
+                    "You have unpaid bills! Please pay first.");
+            return "user/detailedInformationCar";
+        }
+
         if (user.getPassportData() == null) {
             if (passportData.isEmpty()) {
                 model.addAttribute("errorMessage1",
@@ -107,7 +110,8 @@ public class OrderServiceImpl implements OrderService {
 
         if (order.getStartOfRental().toEpochDay() < LocalDate.now().toEpochDay()) {
             model.addAttribute("errorMessage3",
-                    "Invalid start date of rental! The rental start date cannot be earlier than the current date.");
+                    "Invalid start date of rental!" +
+                            " The rental start date cannot be earlier than the current date.");
             return "user/detailedInformationCar";
         }
 
@@ -119,7 +123,8 @@ public class OrderServiceImpl implements OrderService {
 
         if (order.getStartOfRental().toEpochDay() >= order.getEndOfRental().toEpochDay()) {
             model.addAttribute("errorMessage5",
-                    "Invalid end date of rental! The end date of the rental cannot be earlier than the start date of the rental.");
+                    "Invalid end date of rental! " +
+                            "The end date of the rental cannot be earlier than the start date of the rental.");
             return "user/detailedInformationCar";
         }
 
@@ -201,7 +206,8 @@ public class OrderServiceImpl implements OrderService {
         User user = registrationService.findRegisteredUser();
         user.setStatus(User.Status.NO_DEBTS);
         userService.updateUser(user);
-        log.info(user.getName() + " " + user.getSurname() + " paid for the repair. Status has been updated to a " + user.getStatus() + "\n" +
+        log.info(user.getName() + " " + user.getSurname() + " paid for the repair. " +
+                "Status has been updated to a " + user.getStatus() + "\n" +
                 "order status " + order + " has been updated ");
 
         return "redirect:/orders";
@@ -266,6 +272,26 @@ public class OrderServiceImpl implements OrderService {
             return "redirect:/admin/calculateRepair/{id}";
         }
         return "redirect:/admin/orders";
+    }
+
+    public void checkedOrder(Model model) {
+        List<Order> orders = findAll();
+        for (int i = 0; i < orders.size(); i++) {
+            if (orders.get(i).getEndOfRental().toEpochDay() < LocalDate.now().toEpochDay() &&
+                    orders.get(i).getStatus() == Order.Status.CONFIRMED) {
+                orders.get(i).setStatus(Order.Status.EXPIRED);
+                orders.get(i).getUser().setStatus(User.Status.BLOCKED);
+                save(orders.get(i));
+            }
+        }
+        User user = registrationService.findRegisteredUser();
+        List<Order> orderList = repository.findByUserOrderByIdDesc(user);
+        for (int i = 0; i < orderList.size(); i++) {
+            if (orderList.get(i).getStatus() == Order.Status.EXPIRED) {
+                model.addAttribute("error",
+                        "Your order has expired! Urgently need to turn the " + orderList.get(i).getCar().getCarModel());
+            }
+        }
     }
 }
 

@@ -27,7 +27,6 @@ public class RegistrationService {
             model.addAttribute("errorMessage", "Passwords do not match");
             return "/auth/registration";
         }
-
         login.setRole(Login.Role.ROLE_CLIENT);
         login.setPassword(password);
         user.setStatus(User.Status.NO_DEBTS);

@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
 
-    List<Car> findByCarClassNameClass (String nameClass);
+    List<Car> findByCarClassNameClass(String nameClass);
 
-    List<Car> findAllByCarStatusNotLike(CarStatus carStatus);
+    List<Car> findAllByCarStatusLike(CarStatus carStatus);
 }
 

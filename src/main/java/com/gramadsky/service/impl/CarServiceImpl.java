@@ -53,8 +53,8 @@ public class CarServiceImpl implements CarService {
 
     public String carList(Model model) {
         User user = registrationService.findRegisteredUser();
-        CarStatus carStatus = carStatusService.findById(3);
-        List<Car> cars = carRepository.findAllByCarStatusNotLike(carStatus);
+        CarStatus carStatus = carStatusService.findById(1);
+        List<Car> cars = carRepository.findAllByCarStatusLike(carStatus);
 
         model.addAttribute("cars", cars);
         model.addAttribute("name", user.getName());
@@ -76,14 +76,18 @@ public class CarServiceImpl implements CarService {
         model.addAttribute("carOrders", carOrders);
 
         User user = registrationService.findRegisteredUser();
+        model.addAttribute("user", user);
 
         if (user.getStatus() == User.Status.INVOICE_NOT_PAID
                 || user.getStatus() == User.Status.REPAIR_NOT_PAID) {
             model.addAttribute("errorMessage",
                     "You have unpaid bills! Please pay first.");
         }
+        if (user.getStatus() == User.Status.BLOCKED) {
+            model.addAttribute("error",
+                    "Your account has been blocked. Contact Support.");
+        }
 
-        model.addAttribute("user", user);
         return "user/detailedInformationCar";
     }
 
@@ -105,19 +109,16 @@ public class CarServiceImpl implements CarService {
             model.addAttribute("prices", prices);
             return "user/detailedInformationCar";
         }
-
         model.addAttribute("user", user);
         return "user/chooseCar";
     }
 
-    @Override
     public void updateAvailabilityCar(Car car, Integer id) {
         CarStatus carStatus = carStatusRepository.getReferenceById(id);
         car.setCarStatus(carStatus);
         updateCar(car);
     }
 
-    @Override
     public void saveNewCar(String nameClass, String status,
                            Car.Transmission transmission, MultipartFile file, Car car) throws IOException {
         car.setTransmission(transmission);
@@ -128,13 +129,10 @@ public class CarServiceImpl implements CarService {
             var base64EncodedImage = Base64.getMimeEncoder().encodeToString(file.getBytes());
             car.setImageCar(base64EncodedImage);
         }
-
         carRepository.save(car);
         log.info("The new car are saved: " + car);
-
     }
 
-    @Override
     public Page<Car> findPaginated(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.carRepository.findAll(pageable);
@@ -182,7 +180,6 @@ public class CarServiceImpl implements CarService {
         }
         carRepository.save(car);
         log.info(car.getId() + ". " + car.getCarModel() + " has been updated");
-
     }
 
     public void newCar(Model model) {

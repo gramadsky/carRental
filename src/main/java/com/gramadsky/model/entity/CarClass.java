@@ -1,6 +1,7 @@
 package com.gramadsky.model.entity;
 
 import lombok.Data;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,16 @@ public class CarClass {
     @Column(name = "carclass")
     private String nameClass;
 
-    @OneToMany(mappedBy="carClass",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "carClass", cascade = CascadeType.ALL)
     private List<Car> cars = new ArrayList<>();
+
+    public CarClass(Integer id, String nameClass) {
+        this.id = id;
+        this.nameClass = nameClass;
+    }
+
+    public CarClass() {
+    }
 
     @Override
     public String toString() {

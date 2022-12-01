@@ -3,19 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Cars</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -26,13 +20,10 @@
     </div>
 </div>
 
-
 <div id="wrapper">
     <form id="signin" th:method="POST" th:action="@{/auth/registration}">
         <input type="text" th:field="*{login.username}" id="username" placeholder="username"/>
         <span style="color: red" th:if="${error}" th:text="${error}">Error</span>
-        <!--        <p th:if="${#fields.hasErrors('login.username')}" th:class="${#fields.hasErrors('login.username')}? error">Username Error</p>-->
-        <!--        <p style="color:red" th:if="${#fields.hasErrors('login.username')}">Username Error</p>-->
         <br/>
         <input type="password" th:name="password" placeholder="password">
         <br/>
@@ -62,12 +53,8 @@
         <button type="submit">Registration</button>
     </form>
 </div>
-
-
-
 </body>
 </html>
-
 
 <style>
         @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
@@ -192,6 +179,5 @@
     font-size: 22px;
     letter-spacing: 1px;
     }
-
 
 </style>

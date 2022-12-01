@@ -12,7 +12,6 @@
             crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-
 </head>
 <body>
 
@@ -33,56 +32,63 @@
 </div>
 
 <div class="container wb">
-    <div class="row centered">
-        <h2>Add new car</h2>
-        <form th:method="POST" th:action="@{/admin/saveNewCar}" enctype="multipart/form-data">
-            Car model:
-            <input type="text" th:field="*{car.carModel}"/><br/><br/>
-            Car year:
-            <input type="text" th:field="*{car.year}"/><br/><br/>
-            Car class:
-            <select th:name="nameClass">
-                <option value="">Select car class</option>
-                <option th:each="carClass : ${carClasses}"
-                        th:value="${carClass.nameClass}"
-                        th:text="${carClass.nameClass}">
-                </option>
-            </select>
-            <br/>
-            <br/>
-            Total cost of the car:
-            <input type="number" th:field="*{car.totalCostCar}"/><br/><br/>
-            Fuel consumption:
-            <input type="number" step="any" th:field="*{car.fuelConsumption}"/><br/><br/>
-            Engine Volume:
-            <input type="number" step="any" th:field="*{car.engineVolume}"/><br/><br/>
-            Transmission:
-            <select th:object="${car}" th:field="*{transmission}">
-                <option value="">Select transmission</option>
-                <option th:each="transmission : ${transmissions}"
-                        th:value="${transmission}"
-                        th:text="${transmission}">
-                </option>
-            </select>
-            <br/>
-            <br/>
-            Car cost:
-            <input type="number" th:field="*{car.cost}"/><br/><br/>
-            Car condition:
-            <select th:name="status">
-                <option value="">Select car status</option>
-                <option th:each="status : ${carStatuses}"
-                        th:value="${status}"
-                        th:text="${status}">
-                </option>
-            </select>
-            <br/>
-            Add image:
-            <input type="file" th:name="file"/><br/>
-            <br/>
-            <br/>
-            <input type="submit" value="Save new car"/>
-        </form>
+    <div>
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8">
+            <h2 class="row centered">Add new car</h2>
+            <form role="form" th:method="POST" th:action="@{/admin/saveNewCar}" enctype="multipart/form-data">
+                <div class="col-lg-6">
+                    Car model:
+                    <input type="text" class="form-control" th:field="*{car.carModel}"/><br/>
+                    Car year:
+                    <input type="text" class="form-control" th:field="*{car.year}"/><br/>
+                    Car class:
+                    <select th:name="nameClass" class="form-control">
+                        <option value="">Select car class</option>
+                        <option th:each="carClass : ${carClasses}"
+                                th:value="${carClass.nameClass}"
+                                th:text="${carClass.nameClass}">
+                        </option>
+                    </select>
+                    <br/>
+                    Total cost of the car:
+                    <input type="number" class="form-control" th:field="*{car.totalCostCar}"/><br/>
+                    Fuel consumption:
+                    <input type="number" class="form-control" step="any" th:field="*{car.fuelConsumption}"/><br/>
+                </div>
+                <div class="col-lg-6">
+                    Engine Volume:
+                    <input type="number" class="form-control" step="any" th:field="*{car.engineVolume}"/><br/>
+                    Transmission:
+                    <select th:object="${car}" th:field="*{transmission}" class="form-control">
+                        <option value="">Select transmission</option>
+                        <option th:each="transmission : ${transmissions}"
+                                th:value="${transmission}"
+                                th:text="${transmission}">
+                        </option>
+                    </select>
+                    <br/>
+                    Car cost:
+                    <input type="number" class="form-control" th:field="*{car.cost}"/><br/>
+                    Car condition:
+                    <select th:name="status" class="form-control">
+                        <option value="">Select car status</option>
+                        <option th:each="status : ${carStatuses}"
+                                th:value="${status}"
+                                th:text="${status}">
+                        </option>
+                    </select>
+                    <br/>
+                    <span>Add image:</span>
+                    <input type="file" class="form-control" th:name="file"/><br/>
+                    <br/>
+                </div>
+                <input type="submit" class="form-control btn btn-default" value="Save new car"/>
+            </form>
+        </div>
+        <div class="col-lg-2">
+        </div>
     </div>
 </div>
 

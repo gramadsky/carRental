@@ -10,7 +10,7 @@ public interface UserService {
 
     User findById(Integer id);
 
-    void deleteCar(Integer id);
+    void deleteUser(User user);
 
     void saveUser(User user);
 

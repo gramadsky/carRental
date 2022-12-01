@@ -11,9 +11,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-
 </head>
 <body>
 
@@ -61,6 +59,20 @@
                 <td th:text="${login.user.email}"></td>
                 <td th:text="${login.role}"></td>
                 <td th:text="${login.user.status}"></td>
+                <td>
+                    <form th:method="POST" th:action="@{/admin/blocking/{id}(id=${login.user.id})}">
+                        <div th:if="${login.user.status.displayName == 'BLOCKED'}">
+                            <button type="submit" th:name="action" th:value="unlock" class="btn btn-primary">
+                                Unlock
+                            </button>
+                        </div>
+                        <div th:unless="${login.user.status.displayName == 'BLOCKED'}">
+                            <button type="submit" th:name="action" th:value="block" class="btn btn-warning">Block
+                            </button>
+                        </div>
+
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -71,17 +83,7 @@
     <div class="row centered">
         <br/><br/>
         <div class="col-lg-8 col-lg-offset-2">
-            <h4></h4>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p><br/><br/></p>
-        </div>
-    </div>
-</div>
-<div id="f">
-    <div class="container">
-        <div class="row centered">
+            <br/><br/>
         </div>
     </div>
 </div>

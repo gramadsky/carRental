@@ -1,6 +1,7 @@
 package com.gramadsky.model.entity;
 
 import lombok.Data;
+
 import javax.persistence.*;
 
 @Data

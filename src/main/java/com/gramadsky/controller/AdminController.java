@@ -5,6 +5,7 @@ import com.gramadsky.model.entity.Login;
 import com.gramadsky.service.LoginService;
 import com.gramadsky.service.impl.CarServiceImpl;
 import com.gramadsky.service.impl.OrderServiceImpl;
+import com.gramadsky.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ public class AdminController {
     private final OrderServiceImpl orderService;
     private final LoginService loginService;
     private final CarServiceImpl carService;
+    private final UserServiceImpl userService;
 
     @GetMapping("/orders/{pageNo}")
     public String findPaginatedOrders(@PathVariable(value = "pageNo") int pageNo, Model model) {
@@ -37,6 +39,14 @@ public class AdminController {
         return findPaginatedOrders(1, model);
     }
 
+    @PostMapping("/pending/{id}")
+    public String pending(@RequestParam("action") String name,
+                          @PathVariable("id") Integer id) {
+        orderService.pending(name, id);
+
+        return "redirect:/admin/orders";
+    }
+
     @GetMapping("/users")
     public String users(Model model) {
         List<Login> logins = loginService.findAll();
@@ -45,12 +55,12 @@ public class AdminController {
         return "admin/user-list";
     }
 
-    @PostMapping("/pending/{id}")
-    public String pending(@RequestParam("action") String name,
-                          @PathVariable("id") Integer id) {
-        orderService.pending(name, id);
+    @PostMapping("/blocking/{id}")
+    public String blocking(@RequestParam("action") String name,
+                           @PathVariable("id") Integer id) {
+        userService.blocking(name, id);
 
-        return "redirect:/admin/orders";
+        return "redirect:/admin/users";
     }
 
     @GetMapping("cars/{pageNo}")
@@ -125,11 +135,5 @@ public class AdminController {
         orderService.saveCalculateRepair(id, damage);
 
         return "redirect:/admin/orders";
-    }
-
-    @PostMapping("/delete/{id}")
-    public String deleteCar(@PathVariable("id") Integer id) {
-//        carService.deleteCar(carService.findById(id));
-        return "redirect:/hello";
     }
 }

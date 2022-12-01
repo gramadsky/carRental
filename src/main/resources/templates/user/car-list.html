@@ -10,7 +10,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
-
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 
 </head>
@@ -75,8 +74,10 @@
     </div>
 </div>
 
+
 <div class="container w">
     <div class="row centered">
+        <span style="color: red" th:if="${error}" th:text="${error}">Error</span>
         <br/><br/>
         <div class="col-lg-4" th:each="car : ${cars}" >
             <h4>
@@ -85,15 +86,12 @@
             <big>Class </big><big th:text="${#strings.toUpperCase(car.carClass)}"></big><br/>
             <big>transmission </big><big th:text="${car.transmission}"></big><br/>
             <big th:text="${car.cost}"></big><big>$ per/ day </big><br/>
-<!--            <img th:src="/images/${car.image.id}" height="60px">-->
             <img th:src="@{'data:image/jpeg;base64,'+${car.imageCar}}" height="160px"/>
-
             <br/><br/> <br/><br/> <br/><br/>
         </div>
     </div>
     <br/><br/>
 </div>
-
 
 <div class="container wb">
     <div class="row centered">

@@ -46,6 +46,7 @@ public class Order {
         CAR_RETURN("CAR RETURN"),
         CAR_DAMAGED("CAR DAMAGED"),
         WAITING_FOR_PAYMENTS_FOR_REPAIR("WAITING FOR PAYMENTS FOR REPAIR"),
+        EXPIRED("EXPIRED"),
         COMPLETED("COMPLETED");
 
         private final String displayName;

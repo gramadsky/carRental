@@ -3,24 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Cars</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
 
-
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-    <style>
-
-    </style>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -55,16 +46,13 @@
 
 <div class="container wb">
     <div class="row centered">
-        <h1>Pay the order</h1>
+        <h3>Pay the order</h3>
         <form th:method="POST" th:action="@{order/{id}(id=${order.id})}" th:object="${order}">
-            <label>Selected car: </label><br/>
+
             <strong th:text="${order.car.carModel}">value</strong><br/><br/>
 
-            <label>Class: </label><br/>
-            <strong th:text="${order.car.carClass}">value</strong><br/><br/>
-
-            <label>Cost: </label><br/>
-            <strong th:text="${order.car.cost}">value</strong><br/><br/>
+            <label>Cost per day: </label>
+            <strong th:text="${order.car.cost}">value</strong><strong> $</strong><br/><br/>
 
             <label>Rental start date: </label><br/>
             <strong th:text="${order.startOfRental}">value</strong><br/><br/>
@@ -75,7 +63,7 @@
             <label>Passport data: </label><br/>
             <strong th:text="${order.user.passportData}">value</strong><br/><br/>
 
-            <label>To pay: </label><br/>
+            <label>To pay: </label>
             <h3 th:text="${order.price}">value</h3>
 
             <button type="submit" class="btn btn-success" th:name="action" th:value="payNow">Pay now</button>
@@ -83,36 +71,27 @@
         </form>
     </div>
 </div>
-
-        <div class="container wb">
-            <div class="row centered">
-                <br/><br/>
-                <div class="col-lg-8 col-lg-offset-2">
-                    <h4>Why rent with Car Rental Grodno?</h4>
-                    <p>Unlimited miles on standard vehicles</p>
-                    <p>Car rental made quick and easy</p>
-                    <p>Friendly 24/7 customer service</p>
-                    <p><br/><br/></p>
-                </div>
-                <div class="col-lg-2"></div>
-                <div class="col-lg-10 col-lg-offset-1"></div>
-                <img src="img/dsfds" alt="" class="img-responsive">
-            </div>
+<div class="container wb">
+    <div class="row centered">
+        <br/><br/>
+        <div class="col-lg-8 col-lg-offset-2">
+            <h4>Why rent with Car Rental Grodno?</h4>
+            <p>Unlimited miles on standard vehicles</p>
+            <p>Car rental made quick and easy</p>
+            <p>Friendly 24/7 customer service</p>
+            <p><br/><br/></p>
         </div>
-
-        <div id="f">
-            <div class="container">
-                <div class="row centered">
-                    <a href="#">Twitter<i class="fa fa-twitter"></i></a>
-                    <a href="#">Facebook<i class="fa fa-facebook"></i></a>
-                    <a href="#">Instagram<i class="fa fa-instagram"></i></a>
-                </div>
-            </div>
+    </div>
+</div>
+<div id="f">
+    <div class="container">
+        <div class="row centered">
+            <a href="#">Twitter<i class="fa fa-twitter"></i></a>
+            <a href="#">Facebook<i class="fa fa-facebook"></i></a>
+            <a href="#">Instagram<i class="fa fa-instagram"></i></a>
         </div>
+    </div>
+</div>
 
-        <style>
-
-
-        </style>
 </body>
 </html>

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Cars</title>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
@@ -13,7 +12,6 @@
             crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-
 </head>
 <body>
 
@@ -52,7 +50,6 @@
             </tr>
             </thead>
             <tbody>
-
             <tr th:each="car : ${listCars}">
                 <td th:text="${car.id}"></td>
                 <td>
@@ -65,12 +62,6 @@
                 <td th:text="${car.transmission}"></td>
                 <td th:text="${car.cost}"></td>
                 <td th:text="${car.carStatus}"></td>
-
-                <!--                <td>-->
-                <!--                    <form th:method="POST" th:action="@{delete/{id}(id=${car.id})}">-->
-                <!--                        <button type="submit" th:name="action" th:value="Delete">Delete</button>-->
-                <!--                    </form>-->
-                <!--                </td>-->
             </tr>
             </tbody>
         </table>
@@ -95,11 +86,7 @@
     <div class="row centered">
         <br/><br/>
         <div class="col-lg-8 col-lg-offset-2">
-            <h4></h4>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p><br/><br/></p>
+            <br/><br/>
         </div>
     </div>
 </div>
